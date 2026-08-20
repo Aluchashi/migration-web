@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id              String           @id @default(cuid())
+  name            String
+  email           String           @unique
+  password        String
+  createdAt       DateTime         @default(now())
+  profile         Profile?
+  careerMatches   CareerMatch[]
+  skillGapReports SkillGapReport[]
+}
+
+model Profile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  age             Int?
+  currentJob      String?
+  yearsExperience Int?
+  skills          String[]
+  education       String?
+  languages       String[]
+  budget          String?
+  preferredRegion String?
+  updatedAt       DateTime @updatedAt
+}
+
+model CareerMatch {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  suggestedCountries  Json
+  suggestedJobs       Json
+  missingRequirements Json
+  createdAt           DateTime @default(now())
+
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model SkillGapReport {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetJob     String
+  targetCountry String
+  missingSkills Json
+  createdAt     DateTime @default(now())
+
+  @@index([userId, createdAt(sort: Desc)])
+}
