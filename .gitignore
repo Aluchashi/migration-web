@@ -7,3 +7,6 @@ skills/
 .env
 .env.*
 !.env.example
+
+.vercel
+.env*

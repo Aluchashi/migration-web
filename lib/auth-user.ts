@@ -5,14 +5,14 @@ import { prisma } from "@/lib/prisma";
 
 export async function getAuthenticatedUser() {
   const session = await auth();
-  const email = session?.user?.email;
+  const userId = session?.user?.id;
 
-  if (!email) {
+  if (!userId) {
     return null;
   }
 
   return prisma.user.findUnique({
-    where: { email },
+    where: { id: userId },
     select: { id: true, name: true, email: true },
   });
 }

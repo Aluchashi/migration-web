@@ -11,7 +11,9 @@ datasource db {
 model User {
   id              String           @id @default(cuid())
   name            String
-  email           String           @unique
+  username        String           @unique
+  email           String?          @unique
+  phone           String?          @unique
   password        String
   createdAt       DateTime         @default(now())
   profile         Profile?
@@ -31,6 +33,8 @@ model Profile {
   languages       String[]
   budget          String?
   preferredRegion String?
+  nid             String?  @unique
+  dateOfBirth     DateTime?
   updatedAt       DateTime @updatedAt
 }
 

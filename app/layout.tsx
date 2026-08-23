@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { auth } from "@/auth";
 import { Navbar } from "@/components/navbar";
+import { Providers } from "@/components/providers";
 
 import "./globals.css";
 
@@ -18,10 +19,12 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <Navbar authenticated={Boolean(session?.user)} />
-        {children}
+        <Providers>
+          <Navbar authenticated={Boolean(session?.user)} />
+          {children}
+        </Providers>
       </body>
     </html>
   );

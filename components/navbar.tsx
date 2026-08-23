@@ -21,6 +21,10 @@ function linkClass(active: boolean) {
 export function Navbar({ authenticated }: NavbarProps) {
   const pathname = usePathname();
 
+  if (pathname === "/login" || pathname === "/register") {
+    return null;
+  }
+
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
       <nav

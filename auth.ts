@@ -3,6 +3,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { authConfig } from "@/auth.config";
+import { isEmail, normalizeEmail, normalizePhone } from "@/lib/identifier";
 import { prisma } from "@/lib/prisma";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
@@ -13,20 +14,36 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        email: { label: "Email", type: "email" },
+        identifier: { label: "Username, email or phone", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (
-          typeof credentials.email !== "string" ||
+          typeof credentials.identifier !== "string" ||
           typeof credentials.password !== "string"
         ) {
           return null;
         }
 
-        const email = credentials.email.trim().toLowerCase();
-        const user = await prisma.user.findUnique({
-          where: { email },
+        const identifier = credentials.identifier.trim();
+        if (!identifier) {
+          return null;
+        }
+
+        const conditions: { email?: string; phone?: string; username?: string }[] = [];
+
+        if (isEmail(identifier)) {
+          conditions.push({ email: normalizeEmail(identifier) });
+        } else {
+          const phone = normalizePhone(identifier);
+          if (phone) {
+            conditions.push({ phone });
+          }
+          conditions.push({ username: identifier.toLowerCase() });
+        }
+
+        const user = await prisma.user.findFirst({
+          where: { OR: conditions },
         });
 
         if (!user || !(await bcrypt.compare(credentials.password, user.password))) {
@@ -41,4 +58,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    jwt({ token, user }) {
+      if (user?.id) {
+        token.uid = user.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user && typeof token.uid === "string") {
+        session.user.id = token.uid;
+      }
+      return session;
+    },
+  },
 });
