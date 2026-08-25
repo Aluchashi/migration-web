@@ -18,12 +18,22 @@ export default async function CareerMatcherPage() {
   }
 
   const [profile, latest] = await Promise.all([
-    prisma.profile.findUnique({ where: { userId: user.id } }),
+    prisma.profile.findUnique({
+      where: { userId: user.id },
+      include: {
+        workExperiences: { select: { id: true } },
+        educationEntries: { select: { id: true } },
+      },
+    }),
     prisma.careerMatch.findFirst({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
   ]);
 
   const hasProfile = Boolean(
-    profile && (profile.currentJob || profile.education || profile.skills.length > 0),
+    profile &&
+      (profile.skills.length > 0 ||
+        profile.softSkills.length > 0 ||
+        profile.educationEntries.length > 0 ||
+        profile.workExperiences.length > 0),
   );
   const parsed = latest
     ? parseCareerMatch({

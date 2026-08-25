@@ -22,20 +22,65 @@ model User {
 }
 
 model Profile {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id])
-  age             Int?
-  currentJob      String?
-  yearsExperience Int?
-  skills          String[]
-  education       String?
-  languages       String[]
-  budget          String?
-  preferredRegion String?
-  nid             String?  @unique
-  dateOfBirth     DateTime?
-  updatedAt       DateTime @updatedAt
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  dateOfBirth      DateTime?
+  nid              String?  @unique
+  phone            String?
+  district         String?
+  skills           String[]
+  softSkills       String[]
+  budget           String?
+  preferredRegions String[]
+  timeline         String?
+  familyStatus     String?
+  workExperiences  WorkExperience[]
+  educationEntries EducationEntry[]
+  languages        LanguageEntry[]
+  updatedAt        DateTime @updatedAt
+}
+
+model WorkExperience {
+  id               String    @id @default(cuid())
+  profileId        String
+  profile          Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  jobTitle         String
+  industry         String
+  employer         String?
+  years            Int?
+  currentlyWorking Boolean   @default(false)
+  startDate        DateTime?
+  endDate          DateTime?
+  description      String?
+  order            Int       @default(0)
+
+  @@index([profileId])
+}
+
+model EducationEntry {
+  id          String  @id @default(cuid())
+  profileId   String
+  profile     Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  level       String
+  field       String?
+  institution String?
+  passingYear Int?
+  result      String?
+  order       Int     @default(0)
+
+  @@index([profileId])
+}
+
+model LanguageEntry {
+  id          String  @id @default(cuid())
+  profileId   String
+  profile     Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name        String
+  proficiency String
+  order       Int     @default(0)
+
+  @@index([profileId])
 }
 
 model CareerMatch {

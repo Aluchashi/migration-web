@@ -21,7 +21,7 @@ function linkClass(active: boolean) {
 export function Navbar({ authenticated }: NavbarProps) {
   const pathname = usePathname();
 
-  if (pathname === "/login" || pathname === "/register") {
+  if (pathname === "/" || pathname === "/login" || pathname === "/register") {
     return null;
   }
 
@@ -43,10 +43,30 @@ export function Navbar({ authenticated }: NavbarProps) {
             <>
               <Link
                 href="/dashboard"
-                className={linkClass(pathname.startsWith("/dashboard"))}
-                aria-current={pathname.startsWith("/dashboard") ? "page" : undefined}
+                className={linkClass(pathname === "/dashboard")}
+                aria-current={pathname === "/dashboard" ? "page" : undefined}
               >
                 Dashboard
+              </Link>
+              <Link
+                href="/dashboard/profile"
+                aria-current={pathname.startsWith("/dashboard/profile") ? "page" : undefined}
+                className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              >
+                <span
+                  className={[
+                    "flex h-8 w-8 items-center justify-center rounded-full border-2 transition-colors",
+                    pathname.startsWith("/dashboard/profile")
+                      ? "border-emerald-600 bg-emerald-50 text-emerald-700"
+                      : "border-zinc-300 bg-zinc-100 text-zinc-500",
+                  ].join(" ")}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
+                    <circle cx="12" cy="8" r="4" strokeLinecap="round" />
+                    <path d="M5 20c1.4-3 4-4.5 7-4.5s5.6 1.5 7 4.5" strokeLinecap="round" />
+                  </svg>
+                </span>
+                Profile
               </Link>
               <form action={logout}>
                 <button
