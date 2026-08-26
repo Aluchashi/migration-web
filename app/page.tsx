@@ -5,9 +5,9 @@ import {
   PlatformDetails,
   ProblemSection,
   ScamCheckerHighlight,
-} from "@/components/home/home-content-sections";
-import { FinalCta } from "@/components/home/final-cta";
-import { HomeHero } from "@/components/home/home-hero";
+} from "@/components/Page1-Homepage/home-content-sections";
+import { FinalCta } from "@/components/Page1-Homepage/final-cta";
+import { HomeHero } from "@/components/Page1-Homepage/home-hero";
 
 export default function Home() {
   return (

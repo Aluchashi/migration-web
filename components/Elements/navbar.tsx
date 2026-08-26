@@ -21,24 +21,30 @@ function linkClass(active: boolean) {
 export function Navbar({ authenticated }: NavbarProps) {
   const pathname = usePathname();
 
-  if (pathname === "/" || pathname === "/login" || pathname === "/register") {
+  if (pathname === "/login" || pathname === "/register") {
     return null;
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-emerald-100 bg-white/90 shadow-sm shadow-emerald-950/5 backdrop-blur-xl">
       <nav
-        className="mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6"
+        className="flex min-h-[76px] w-full items-center justify-between gap-3 px-5 sm:px-8"
         aria-label="Main navigation"
       >
         <Link
           href="/"
-          className="shrink-0 text-sm font-semibold text-zinc-950 outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-4"
+          className="flex shrink-0 items-center gap-2.5 rounded-xl outline-none transition-transform hover:-translate-y-px focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-4"
         >
-          Migration Web
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-md shadow-emerald-700/20" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" className="h-5 w-5">
+              <path d="M21 3 3 10.5l6.5 2L11.5 19l3-6L21 3Z" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="m9.5 12.5 11.5-9.5-9.5 11.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+          <span className="text-lg font-bold tracking-tight text-zinc-950 sm:text-xl">Migration Web</span>
         </Link>
 
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
           {authenticated ? (
             <>
               <Link
@@ -50,13 +56,13 @@ export function Navbar({ authenticated }: NavbarProps) {
               </Link>
               <Link
                 href="/dashboard/profile"
-                aria-current={pathname.startsWith("/dashboard/profile") ? "page" : undefined}
+                aria-current={pathname?.startsWith("/dashboard/profile") ? "page" : undefined}
                 className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
               >
                 <span
                   className={[
                     "flex h-8 w-8 items-center justify-center rounded-full border-2 transition-colors",
-                    pathname.startsWith("/dashboard/profile")
+                    pathname?.startsWith("/dashboard/profile")
                       ? "border-emerald-600 bg-emerald-50 text-emerald-700"
                       : "border-zinc-300 bg-zinc-100 text-zinc-500",
                   ].join(" ")}
@@ -81,7 +87,7 @@ export function Navbar({ authenticated }: NavbarProps) {
             <>
               <Link
                 href="/login"
-                className={linkClass(pathname === "/login")}
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-zinc-700 transition-all hover:-translate-y-px hover:bg-emerald-50 hover:text-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
                 aria-current={pathname === "/login" ? "page" : undefined}
               >
                 Login
@@ -90,10 +96,10 @@ export function Navbar({ authenticated }: NavbarProps) {
                 href="/register"
                 aria-current={pathname === "/register" ? "page" : undefined}
                 className={[
-                  "rounded-md border px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2",
+                  "rounded-lg border px-4 py-2 text-sm font-semibold shadow-sm transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2",
                   pathname === "/register"
                     ? "border-emerald-700 bg-emerald-700 text-white"
-                    : "border-zinc-950 bg-zinc-950 text-white hover:border-zinc-800 hover:bg-zinc-800",
+                    : "border-emerald-700 bg-emerald-700 text-white hover:border-emerald-800 hover:bg-emerald-800",
                 ].join(" ")}
               >
                 Register

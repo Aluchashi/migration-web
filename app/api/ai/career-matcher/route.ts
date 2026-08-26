@@ -31,7 +31,14 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id } });
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id },
+    include: {
+      workExperiences: { orderBy: { order: "asc" } },
+      educationEntries: { orderBy: { order: "asc" } },
+      languages: { orderBy: { order: "asc" } },
+    },
+  });
 
   if (!profile) {
     return NextResponse.json(
@@ -40,9 +47,15 @@ export async function POST() {
     );
   }
 
-  if (!profile.currentJob && !profile.education && profile.skills.length === 0) {
+  const hasContent =
+    profile.workExperiences.length > 0 ||
+    profile.educationEntries.length > 0 ||
+    profile.skills.length > 0 ||
+    profile.softSkills.length > 0;
+
+  if (!hasContent) {
     return NextResponse.json(
-      { error: "Add your current job, education, or skills before requesting recommendations." },
+      { error: "Add your work experience, education, or skills before requesting recommendations." },
       { status: 400 },
     );
   }
@@ -67,13 +80,28 @@ export async function POST() {
         {
           role: "user",
           content: JSON.stringify({
-            currentJob: profile.currentJob,
-            yearsExperience: profile.yearsExperience,
+            workExperience: profile.workExperiences.map((entry) => ({
+              jobTitle: entry.jobTitle,
+              industry: entry.industry,
+              years: entry.years,
+              currentlyWorking: entry.currentlyWorking,
+              duties: entry.description,
+            })),
+            education: profile.educationEntries.map((entry) => ({
+              level: entry.level,
+              field: entry.field,
+              institution: entry.institution,
+              passingYear: entry.passingYear,
+            })),
             skills: profile.skills,
-            education: profile.education,
-            languages: profile.languages,
+            softSkills: profile.softSkills,
+            languages: profile.languages.map((entry) => ({
+              name: entry.name,
+              proficiency: entry.proficiency,
+            })),
             budget: profile.budget,
-            preferredRegion: profile.preferredRegion,
+            preferredRegions: profile.preferredRegions,
+            timeline: profile.timeline,
           }),
         },
       ],

@@ -37,13 +37,13 @@ export const SwitchMode: FC<SwitchModeProps> = ({
       style={{
         width,
         height,
-        borderColor: isDark ? "#2f4a6b" : "rgba(255,255,255,0.7)",
+        borderColor: isDark ? "#27574c" : "rgba(255,255,255,0.7)",
       }}
     >
       {/* TRACK */}
       <motion.div
         className="absolute inset-0 rounded-full"
-        animate={{ backgroundColor: isDark ? "#0B1B33" : "#BDE3FB" }}
+        animate={{ backgroundColor: isDark ? "#103a31" : "#bbf7d0" }}
         transition={{ duration: 0.4 }}
       />
 
@@ -58,8 +58,8 @@ export const SwitchMode: FC<SwitchModeProps> = ({
           height,
           right: isDark ? -2 : undefined,
           left: isDark ? undefined : -2,
-          backgroundColor: isDark ? "#16283F" : "#FFFFFF",
-          borderColor: isDark ? "#2f4a6b" : "rgba(255,255,255,0.9)",
+          backgroundColor: isDark ? "#164e3d" : "#FFFFFF",
+          borderColor: isDark ? "#27574c" : "rgba(255,255,255,0.9)",
         }}
       />
 
@@ -71,9 +71,9 @@ export const SwitchMode: FC<SwitchModeProps> = ({
         transition={{ stiffness: 20 }}
       >
         {isDark ? (
-          <IoSunnyOutline color="#7fb5e6" style={{ width: iconSize, height: iconSize }} />
+          <IoSunnyOutline color="#86efac" style={{ width: iconSize, height: iconSize }} />
         ) : (
-          <IoSunny color="#1c6fb8" style={{ width: iconSize, height: iconSize }} />
+          <IoSunny color="#047857" style={{ width: iconSize, height: iconSize }} />
         )}
       </motion.div>
 
@@ -85,9 +85,9 @@ export const SwitchMode: FC<SwitchModeProps> = ({
         transition={{ stiffness: 20, damping: 14 }}
       >
         {isDark ? (
-          <IoMoon color="#BFDBFE" style={{ width: iconSize, height: iconSize }} />
+          <IoMoon color="#d1fae5" style={{ width: iconSize, height: iconSize }} />
         ) : (
-          <IoMoonOutline color="#4187c3" style={{ width: iconSize, height: iconSize }} />
+          <IoMoonOutline color="#059669" style={{ width: iconSize, height: iconSize }} />
         )}
       </motion.div>
     </motion.button>

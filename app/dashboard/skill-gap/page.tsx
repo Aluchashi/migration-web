@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { SkillGapAnalyzer, type SkillGapReportView } from "@/components/skill-gap-analyzer";
+import { SkillGapAnalyzer, type SkillGapReportView } from "@/components/Page6-Skill/skill-gap-analyzer";
 import { getAuthenticatedUser } from "@/lib/auth-user";
 import { parseCareerMatch } from "@/lib/career-match";
 import { prisma } from "@/lib/prisma";
@@ -23,7 +23,13 @@ export default async function SkillGapPage() {
   }
 
   const [profile, careerMatch, latestReport] = await Promise.all([
-    prisma.profile.findUnique({ where: { userId: user.id } }),
+    prisma.profile.findUnique({
+      where: { userId: user.id },
+      include: {
+        workExperiences: { select: { id: true } },
+        educationEntries: { select: { id: true } },
+      },
+    }),
     prisma.careerMatch.findFirst({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
     prisma.skillGapReport.findFirst({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
   ]);
@@ -48,7 +54,11 @@ export default async function SkillGapPage() {
       }
     : null;
   const hasProfile = Boolean(
-    profile && (profile.skills.length > 0 || profile.education || profile.yearsExperience !== null),
+    profile &&
+      (profile.skills.length > 0 ||
+        profile.softSkills.length > 0 ||
+        profile.educationEntries.length > 0 ||
+        profile.workExperiences.length > 0),
   );
 
   return (

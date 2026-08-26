@@ -17,7 +17,7 @@ export function DashboardNav() {
     <div className="border-b border-zinc-200 bg-white">
       <nav className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2 sm:px-6" aria-label="Dashboard">
         {items.map((item) => {
-          const active = item.href === "/dashboard" ? pathname === item.href : pathname.startsWith(item.href);
+          const active = item.href === "/dashboard" ? pathname === item.href : pathname?.startsWith(item.href);
 
           return (
             <Link

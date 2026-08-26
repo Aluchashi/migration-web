@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { HomeSectionHeading } from "@/components/home/home-section-heading";
+import { HomeSectionHeading } from "@/components/Page1-Homepage/home-section-heading";
 
 const questions = [
   ["Which job is right for me?", "Career Matcher"],

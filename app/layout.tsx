@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 import { auth } from "@/auth";
-import { Navbar } from "@/components/navbar";
-import { Providers } from "@/components/providers";
+import { Navbar } from "@/components/Elements/navbar";
+import { PageTransition } from "@/components/Elements/page-transition";
+import { Providers } from "@/components/Elements/providers";
 
 import "./globals.css";
 
@@ -23,7 +24,7 @@ export default async function RootLayout({
       <body>
         <Providers>
           <Navbar authenticated={Boolean(session?.user)} />
-          {children}
+          <PageTransition>{children}</PageTransition>
         </Providers>
       </body>
     </html>

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 
-import { UserIcon } from "@/components/floating-field";
-import { SwitchMode } from "@/components/switch-mode";
+import { UserIcon } from "@/components/Elements/floating-field";
+import { SwitchMode } from "@/components/Elements/switch-mode";
 
 type HomeHeaderProps = {
   authenticated: boolean;

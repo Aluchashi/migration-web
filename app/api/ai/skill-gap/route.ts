@@ -56,7 +56,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id } });
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id },
+    include: {
+      workExperiences: { orderBy: { order: "asc" } },
+      educationEntries: { orderBy: { order: "asc" } },
+      languages: { orderBy: { order: "asc" } },
+    },
+  });
 
   if (!profile) {
     return NextResponse.json(
@@ -65,9 +72,15 @@ export async function POST(request: Request) {
     );
   }
 
-  if (profile.skills.length === 0 && !profile.education && profile.yearsExperience === null) {
+  const hasContent =
+    profile.workExperiences.length > 0 ||
+    profile.educationEntries.length > 0 ||
+    profile.skills.length > 0 ||
+    profile.softSkills.length > 0;
+
+  if (!hasContent) {
     return NextResponse.json(
-      { error: "Add skills, education, or experience to your profile before continuing." },
+      { error: "Add your work experience, education, or skills before continuing." },
       { status: 400 },
     );
   }
@@ -92,10 +105,28 @@ export async function POST(request: Request) {
         {
           role: "user",
           content: JSON.stringify({
-            currentSkills: profile.skills,
-            education: profile.education,
-            yearsExperience: profile.yearsExperience,
-            currentJob: profile.currentJob,
+            currentSkills: [...profile.skills, ...profile.softSkills],
+            education: profile.educationEntries.map((entry) => ({
+              level: entry.level,
+              field: entry.field,
+              institution: entry.institution,
+              passingYear: entry.passingYear,
+            })),
+            yearsExperience: profile.workExperiences.reduce(
+              (total, entry) => total + (entry.years ?? 0),
+              0,
+            ),
+            workExperience: profile.workExperiences.map((entry) => ({
+              jobTitle: entry.jobTitle,
+              industry: entry.industry,
+              years: entry.years,
+              currentlyWorking: entry.currentlyWorking,
+              duties: entry.description,
+            })),
+            languages: profile.languages.map((entry) => ({
+              name: entry.name,
+              proficiency: entry.proficiency,
+            })),
             targetJob,
             targetCountry,
           }),
