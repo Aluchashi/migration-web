@@ -16,9 +16,10 @@ model User {
   phone           String?          @unique
   password        String
   createdAt       DateTime         @default(now())
-  profile         Profile?
-  careerMatches   CareerMatch[]
-  skillGapReports SkillGapReport[]
+  profile          Profile?
+  careerMatches    CareerMatch[]
+  skillGapReports  SkillGapReport[]
+  legalStepProgress LegalStepProgress[]
 }
 
 model Profile {
@@ -105,4 +106,16 @@ model SkillGapReport {
   createdAt     DateTime @default(now())
 
   @@index([userId, createdAt(sort: Desc)])
+}
+
+model LegalStepProgress {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  corridorId String
+  stepId     String
+  completedAt DateTime @default(now())
+
+  @@unique([userId, corridorId, stepId])
+  @@index([userId, corridorId])
 }

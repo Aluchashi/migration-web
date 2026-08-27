@@ -11,10 +11,11 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const [profile, matchCount, reportCount] = await Promise.all([
+  const [profile, matchCount, reportCount, legalSteps] = await Promise.all([
     prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true } }),
     prisma.careerMatch.count({ where: { userId: user.id } }),
     prisma.skillGapReport.count({ where: { userId: user.id } }),
+    prisma.legalStepProgress.count({ where: { userId: user.id } }),
   ]);
 
   return (
@@ -27,7 +28,7 @@ export default async function DashboardPage() {
         Build your career profile, then compare practical country and job options.
       </p>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Link href="/dashboard/profile" className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-zinc-300 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600">
           <div className="flex items-center justify-between gap-4">
             <h2 className="font-semibold text-zinc-950">Career profile</h2>
@@ -52,6 +53,14 @@ export default async function DashboardPage() {
             <span className="text-sm font-medium text-zinc-500">{reportCount} saved</span>
           </div>
           <p className="mt-2 text-sm leading-6 text-zinc-600">Prioritize the skills, training, and qualifications needed for a target role.</p>
+        </Link>
+
+        <Link href="/dashboard/legal-guidance" className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-zinc-300 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="font-semibold text-zinc-950">Legal Migration Guidance</h2>
+            <span className="text-sm font-medium text-zinc-500">{legalSteps} steps done</span>
+          </div>
+          <p className="mt-2 text-sm leading-6 text-zinc-600">Step-by-step government process, documents, and cost transparency for your destination.</p>
         </Link>
       </div>
     </main>

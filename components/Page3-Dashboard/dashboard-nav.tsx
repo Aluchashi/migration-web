@@ -8,6 +8,7 @@ const items = [
   { href: "/dashboard/profile", label: "Profile" },
   { href: "/dashboard/career-matcher", label: "Career matcher" },
   { href: "/dashboard/skill-gap", label: "Skill gap" },
+  { href: "/dashboard/legal-guidance", label: "Legal guidance" },
 ];
 
 export function DashboardNav() {
