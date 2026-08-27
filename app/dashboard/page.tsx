@@ -28,7 +28,7 @@ export default async function DashboardPage() {
         Build your career profile, then compare practical country and job options.
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <Link href="/dashboard/profile" className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-zinc-300 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600">
           <div className="flex items-center justify-between gap-4">
             <h2 className="font-semibold text-zinc-950">Career profile</h2>
@@ -61,6 +61,22 @@ export default async function DashboardPage() {
             <span className="text-sm font-medium text-zinc-500">{legalSteps} steps done</span>
           </div>
           <p className="mt-2 text-sm leading-6 text-zinc-600">Step-by-step government process, documents, and cost transparency for your destination.</p>
+        </Link>
+
+        <Link href="/dashboard/learning-roadmap" className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-zinc-300 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="font-semibold text-zinc-950">Learning Roadmap</h2>
+            <span className="text-sm font-medium text-zinc-500">Plan your path</span>
+          </div>
+          <p className="mt-2 text-sm leading-6 text-zinc-600">An ordered study and training plan to close your skill gaps for a target role abroad.</p>
+        </Link>
+
+        <Link href="/dashboard/scam-checker" className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-zinc-300 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="font-semibold text-zinc-950">Scam Risk Checker</h2>
+            <span className="text-sm font-medium text-zinc-500">Stay safe</span>
+          </div>
+          <p className="mt-2 text-sm leading-6 text-zinc-600">Screen a recruitment agency against common warning signs before you pay.</p>
         </Link>
       </div>
     </main>
