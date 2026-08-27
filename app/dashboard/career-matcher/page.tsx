@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { CareerMatcher, type CareerMatchView } from "@/components/Page5-CareerCountry/career-matcher";
+import { CareerMatcher } from "@/components/Page5-CareerCountry/career-matcher";
 import { getAuthenticatedUser } from "@/lib/auth-user";
-import { parseCareerMatch } from "@/lib/career-match";
+import { findEssentialGaps } from "@/lib/career-scoring";
+import { buildSnapshot } from "@/lib/profile-snapshot";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -17,38 +18,43 @@ export default async function CareerMatcherPage() {
     redirect("/login");
   }
 
-  const [profile, latest] = await Promise.all([
-    prisma.profile.findUnique({
-      where: { userId: user.id },
-      include: {
-        workExperiences: { select: { id: true } },
-        educationEntries: { select: { id: true } },
-      },
-    }),
-    prisma.careerMatch.findFirst({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
-  ]);
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id },
+    include: {
+      workExperiences: { orderBy: { order: "asc" } },
+      educationEntries: { orderBy: { order: "asc" } },
+      languages: { orderBy: { order: "asc" } },
+    },
+  });
 
-  const hasProfile = Boolean(
-    profile &&
-      (profile.skills.length > 0 ||
-        profile.softSkills.length > 0 ||
-        profile.educationEntries.length > 0 ||
-        profile.workExperiences.length > 0),
+  const snapshot = buildSnapshot(profile);
+
+  const essentialGaps = snapshot ? findEssentialGaps(snapshot) : [];
+
+  const hasAnyCoreData = Boolean(
+    snapshot &&
+      (snapshot.skills.length > 0 ||
+        snapshot.softSkills.length > 0 ||
+        snapshot.educationLevels.length > 0 ||
+        snapshot.jobTitles.length > 0),
   );
-  const parsed = latest
-    ? parseCareerMatch({
-        suggestedCountries: latest.suggestedCountries,
-        suggestedJobs: latest.suggestedJobs,
-        missingRequirements: latest.missingRequirements,
-      })
-    : null;
-  const initialMatch: CareerMatchView | null = latest && parsed
-    ? { id: latest.id, createdAt: latest.createdAt.toISOString(), ...parsed }
-    : null;
+
+  const effectiveGaps =
+    snapshot && !hasAnyCoreData
+      ? Array.from(
+          new Set([
+            ...essentialGaps,
+            "Add your work experience, education, or skills",
+          ]),
+        )
+      : essentialGaps;
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-      <CareerMatcher hasProfile={hasProfile} initialMatch={initialMatch} />
+      <CareerMatcher
+        snapshot={hasAnyCoreData ? snapshot : null}
+        essentialGaps={effectiveGaps}
+      />
     </main>
   );
 }

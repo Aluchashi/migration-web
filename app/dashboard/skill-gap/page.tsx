@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { SkillGapAnalyzer, type SkillGapReportView } from "@/components/Page6-Skill/skill-gap-analyzer";
+import { MIGRATION_CORRIDORS } from "@/lib/migration-corridors";
 import { getAuthenticatedUser } from "@/lib/auth-user";
 import { parseCareerMatch } from "@/lib/career-match";
 import { prisma } from "@/lib/prisma";
@@ -15,7 +16,11 @@ function unique(values: string[]) {
   return Array.from(new Set(values.map((value) => value.trim()).filter(Boolean)));
 }
 
-export default async function SkillGapPage() {
+export default async function SkillGapPage({
+  searchParams,
+}: {
+  searchParams: { job?: string; country?: string };
+}) {
   const user = await getAuthenticatedUser();
 
   if (!user) {
@@ -61,13 +66,34 @@ export default async function SkillGapPage() {
         profile.workExperiences.length > 0),
   );
 
+  const matcherSuggestions = MIGRATION_CORRIDORS.map((corridor) => ({
+    id: corridor.id,
+    job: corridor.jobTitle,
+    country: corridor.country,
+    category: corridor.category,
+    demandLevel: corridor.demandLevel,
+    confidence: corridor.confidence,
+    monthlySalaryLabel: corridor.monthlySalaryLabel,
+    timelineLabel: corridor.timelineLabel,
+    sourceUrl: corridor.sourceUrl,
+  }));
+
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <SkillGapAnalyzer
         hasProfile={hasProfile}
-        jobSuggestions={unique(parsedMatch?.suggestedJobs.map((item) => item.job) ?? [])}
-        countrySuggestions={unique(parsedMatch?.suggestedCountries.map((item) => item.country) ?? [])}
+        jobSuggestions={unique([
+          ...(parsedMatch?.suggestedJobs.map((item) => item.job) ?? []),
+          ...matcherSuggestions.map((item) => item.job),
+        ])}
+        countrySuggestions={unique([
+          ...(parsedMatch?.suggestedCountries.map((item) => item.country) ?? []),
+          ...matcherSuggestions.map((item) => item.country),
+        ])}
         initialReport={initialReport}
+        initialJob={typeof searchParams.job === "string" ? searchParams.job : undefined}
+        initialCountry={typeof searchParams.country === "string" ? searchParams.country : undefined}
+        matchSuggestions={matcherSuggestions}
       />
     </main>
   );
