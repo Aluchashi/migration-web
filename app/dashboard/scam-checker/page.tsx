@@ -13,8 +13,8 @@ export default async function ScamRiskPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <p className="text-sm font-medium text-emerald-700">Before you trust an agency</p>
-      <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl">Scam Risk Checker</h1>
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
+      <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl dark:text-zinc-50">Scam Risk Checker</h1>
+      <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
         Check a recruitment agency against common warning signs before you pay or sign anything.
       </p>
       <div className="mt-7">

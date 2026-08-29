@@ -3,8 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { GlobalSearchIcon } from "@hugeicons/core-free-icons";
 
 import type { SkillGapResult, SkillPriority } from "@/lib/skill-gap";
+
+const ICON_TILE = "bg-muted dark:bg-muted/10 mb-0 size-fit rounded-xl p-px";
+const ICON_INNER =
+  "flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 shadow-[inset_0_-2px_0.5px_0px_rgba(0,0,0,0),inset_0px_2px_0_2px_rgba(255,255,255,1),0_0px_6px_0_rgba(0,0,0,0.07),0_2px_4px_0_rgba(0,0,0,0.05)] dark:bg-black/20 dark:shadow-[inset_0_-1px_0px_0px_rgba(0,0,0,0.1),inset_0px_1px_0px_0px_rgba(255,255,255,0.05),0_0px_2px_0_rgba(0,0,0,0.2),0_1px_4px_0_rgba(0,0,0,0.05)]";
 
 export type SkillGapReportView = SkillGapResult & {
   id: string;
@@ -166,16 +172,18 @@ export function SkillGapAnalyzer({
 
   return (
     <>
-      <div className="border-b border-zinc-200 pb-7">
+      <div className="border-b border-zinc-200 pb-7 dark:border-zinc-800">
         <p className="text-sm font-medium text-emerald-700">AI skills planning</p>
-        <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl">Skill Gap Analyzer</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
+        <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl dark:text-zinc-50">
+          Skill Gap Analyzer
+        </h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
           Compare your saved experience with the practical skills needed for a target role and country.
         </p>
       </div>
 
       {!hasProfile ? (
-        <div className="mt-6 border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="mt-6 rounded-2xl border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:bg-amber-950/40">
           Add your skills, education, or experience to your{" "}
           <Link href="/dashboard/profile" className="font-semibold underline underline-offset-2">
             profile
@@ -186,31 +194,38 @@ export function SkillGapAnalyzer({
 
       {matchSuggestions && matchSuggestions.length > 0 ? (
         <div className="mt-6">
-          <p className="text-sm font-semibold text-zinc-800">From your Career Matcher</p>
+          <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">From your Career Matcher</p>
           <p className="mt-1 text-xs text-zinc-500">
             Pick a role your matcher suggested - it loads the job and country and runs the analysis.
           </p>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-3 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {matchSuggestions.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col rounded-lg border border-zinc-200 bg-white shadow-sm transition hover:border-emerald-500 hover:shadow"
+                className="group flex flex-col overflow-hidden rounded-3xl bg-muted/50 shadow-none ring-0 transition-all duration-300 hover:shadow-[0_12px_34px_rgba(0,0,0,0.16)] dark:hover:shadow-[0_12px_34px_rgba(0,0,0,0.6)]"
               >
                 <button
                   type="button"
                   onClick={() => pickMatch(item)}
-                  className="flex flex-1 flex-col gap-3 rounded-t-lg p-4 text-left"
+                  className="flex flex-1 flex-col gap-3 rounded-t-3xl p-6 text-left"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h4 className="font-semibold text-zinc-950">{item.job}</h4>
+                  <div className="flex items-start gap-3">
+                    <div className={ICON_TILE}>
+                      <div className={ICON_INNER}>
+                        <HugeiconsIcon icon={GlobalSearchIcon} className="h-5 w-5 text-emerald-500" />
+                      </div>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        <h4 className="font-semibold text-zinc-950 dark:text-zinc-50">{item.job}</h4>
+                        <span
+                          className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold capitalize ring-1 ring-inset ${demandBadge[item.demandLevel]}`}
+                        >
+                          {item.demandLevel} demand
+                        </span>
+                      </div>
                       <p className="mt-0.5 text-xs text-zinc-500">{item.country}</p>
                     </div>
-                    <span
-                      className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold capitalize ring-1 ring-inset ${demandBadge[item.demandLevel]}`}
-                    >
-                      {item.demandLevel} demand
-                    </span>
                   </div>
                   <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-400">
                     {item.category}
@@ -218,15 +233,15 @@ export function SkillGapAnalyzer({
                   <dl className="space-y-1.5 text-xs">
                     <div className="flex justify-between gap-2">
                       <dt className="text-zinc-500">Salary</dt>
-                      <dd className="text-right font-medium text-zinc-700">{item.monthlySalaryLabel}</dd>
+                      <dd className="text-right font-medium text-zinc-700 dark:text-zinc-200">{item.monthlySalaryLabel}</dd>
                     </div>
                     <div className="flex justify-between gap-2">
                       <dt className="text-zinc-500">Timeline</dt>
-                      <dd className="text-right font-medium text-zinc-700">{item.timelineLabel}</dd>
+                      <dd className="text-right font-medium text-zinc-700 dark:text-zinc-200">{item.timelineLabel}</dd>
                     </div>
                   </dl>
                 </button>
-                <div className="flex items-center justify-between gap-2 border-t border-zinc-100 px-4 py-2">
+                <div className="flex items-center justify-between gap-2 border-t border-zinc-200 px-6 py-3 dark:border-zinc-800">
                   <span
                     className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ring-1 ring-inset ${
                       item.confidence === "verified"
@@ -251,10 +266,13 @@ export function SkillGapAnalyzer({
         </div>
       ) : null}
 
-      <form onSubmit={analyze} className="mt-7 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm sm:p-6">
+      <form
+        onSubmit={analyze}
+        className="mt-7 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+      >
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
-            <label htmlFor="targetJob" className="mb-2 block text-sm font-medium text-zinc-800">
+            <label htmlFor="targetJob" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
               Job name <span className="text-zinc-400">(what job)</span>
             </label>
             <input
@@ -266,13 +284,13 @@ export function SkillGapAnalyzer({
               maxLength={160}
               value={targetJob}
               onChange={(event) => setTargetJob(event.target.value)}
-              className="h-11 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+              className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
               placeholder="e.g. Maintenance electrician"
             />
           </div>
 
           <div>
-            <label htmlFor="targetCountry" className="mb-2 block text-sm font-medium text-zinc-800">
+            <label htmlFor="targetCountry" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
               Company country
             </label>
             <input
@@ -284,7 +302,7 @@ export function SkillGapAnalyzer({
               maxLength={100}
               value={targetCountry}
               onChange={(event) => setTargetCountry(event.target.value)}
-              className="h-11 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+              className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
               placeholder="e.g. Saudi Arabia"
             />
           </div>
@@ -300,9 +318,9 @@ export function SkillGapAnalyzer({
             {showExternal ? "− Hide external job details" : "+ Add external job details"}
           </button>
           {showExternal ? (
-            <div className="mt-4 grid gap-5 rounded-md border border-zinc-200 bg-zinc-50 p-4 sm:grid-cols-2">
+            <div className="mt-4 grid gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-zinc-900/60 sm:grid-cols-2">
               <div>
-                <label htmlFor="companyName" className="mb-2 block text-sm font-medium text-zinc-800">
+                <label htmlFor="companyName" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
                   Company name <span className="text-zinc-400">(optional)</span>
                 </label>
                 <input
@@ -312,13 +330,13 @@ export function SkillGapAnalyzer({
                   maxLength={160}
                   value={companyName}
                   onChange={(event) => setCompanyName(event.target.value)}
-                  className="h-11 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                  className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
                   placeholder="e.g. ABC Wires Co."
                 />
               </div>
 
               <div>
-                <label htmlFor="designation" className="mb-2 block text-sm font-medium text-zinc-800">
+                <label htmlFor="designation" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
                   Designation <span className="text-zinc-400">(optional)</span>
                 </label>
                 <select
@@ -326,7 +344,7 @@ export function SkillGapAnalyzer({
                   name="designation"
                   value={designation}
                   onChange={(event) => setDesignation(event.target.value)}
-                  className="h-11 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                  className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
                 >
                   <option value="">Select level</option>
                   {designationOptions.map((option) => (
@@ -338,7 +356,7 @@ export function SkillGapAnalyzer({
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="expectedSalary" className="mb-2 block text-sm font-medium text-zinc-800">
+                <label htmlFor="expectedSalary" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
                   Expected salary <span className="text-zinc-400">(optional)</span>
                 </label>
                 <input
@@ -348,7 +366,7 @@ export function SkillGapAnalyzer({
                   maxLength={60}
                   value={expectedSalary}
                   onChange={(event) => setExpectedSalary(event.target.value)}
-                  className="h-11 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                  className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
                   placeholder="e.g. SAR 1,500/month"
                 />
               </div>
@@ -364,16 +382,19 @@ export function SkillGapAnalyzer({
         ) : null}
 
         {error ? (
-          <p role="alert" className="mt-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p
+            role="alert"
+            className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/60 dark:bg-red-950/40"
+          >
             {error}
           </p>
         ) : null}
 
-        <div className="mt-6 flex justify-end border-t border-zinc-200 pt-5">
+        <div className="mt-6 flex justify-end border-t border-zinc-200 pt-5 dark:border-zinc-800">
           <button
             type="submit"
             disabled={!hasProfile || pending}
-            className="inline-flex h-11 items-center justify-center rounded-md bg-zinc-950 px-5 text-sm font-semibold text-white transition hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-400"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-semibold text-white transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-400"
           >
             {pending ? "Analyzing..." : report ? "Run new analysis" : "Analyze skill gaps"}
           </button>
@@ -386,12 +407,12 @@ export function SkillGapAnalyzer({
             <button
               type="button"
               onClick={() => setReportOpen((value) => !value)}
-              className="flex w-full items-center justify-between gap-4 border-b border-zinc-200 pb-5 text-left"
+              className="flex w-full items-center justify-between gap-4 rounded-3xl bg-muted/50 p-6 text-left shadow-none ring-0 transition-all duration-300 hover:shadow-[0_12px_34px_rgba(0,0,0,0.16)] dark:hover:shadow-[0_12px_34px_rgba(0,0,0,0.6)]"
               aria-expanded={reportOpen}
             >
               <div>
-                <p className="text-xs font-semibold uppercase text-zinc-500">Latest analysis</p>
-                <h2 className="mt-2 text-xl font-semibold text-zinc-950">
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Latest analysis</p>
+                <h2 className="mt-2 text-xl font-semibold text-zinc-950 dark:text-zinc-50">
                   {report.targetJob} in {report.targetCountry}
                 </h2>
                 <p className="mt-2 text-xs text-zinc-500">
@@ -409,14 +430,24 @@ export function SkillGapAnalyzer({
                     {entry.count} {entry.priority}
                   </span>
                 ))}
-                <span className="text-zinc-400">{reportOpen ? "▲" : "▼"}</span>
+                <span className="text-zinc-400">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className={`h-4 w-4 transition-transform ${reportOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
               </div>
             </button>
 
             {reportOpen ? (
               <div className="mt-7">
-                <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-md bg-zinc-50 px-4 py-3 text-xs text-zinc-600">
-                  <span className="font-semibold text-zinc-700">How to read this:</span>
+                <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl bg-muted/50 px-4 py-3 text-xs text-zinc-600 dark:bg-zinc-900/60 dark:text-zinc-300">
+                  <span className="font-semibold text-zinc-700 dark:text-zinc-200">How to read this:</span>
                   <span className="inline-flex items-center gap-1.5">
                     <span className="h-2.5 w-2.5 rounded-full bg-red-500" /> High focus = learn first
                   </span>
@@ -440,7 +471,7 @@ export function SkillGapAnalyzer({
                           <div className="mb-4 flex items-center gap-3">
                             <h3
                               id={`${priority}-priority-heading`}
-                              className="text-lg font-semibold text-zinc-950"
+                              className="text-lg font-semibold text-zinc-950 dark:text-zinc-50"
                             >
                               {meta.label}
                             </h3>
@@ -450,14 +481,14 @@ export function SkillGapAnalyzer({
                               {skills.length}
                             </span>
                           </div>
-                          <div className="grid gap-4 md:grid-cols-2">
+                          <div className="grid gap-6 md:grid-cols-2">
                             {skills.map((item) => (
                               <article
                                 key={`${item.priority}-${item.skill}`}
-                                className={`rounded-lg border border-l-4 border-zinc-200 bg-white p-5 shadow-sm ${meta.ringClass}`}
+                                className={`flex flex-col rounded-3xl border border-l-4 border-zinc-200 bg-muted/50 p-6 shadow-sm transition-all duration-300 hover:shadow-[0_12px_34px_rgba(0,0,0,0.16)] dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:shadow-[0_12px_34px_rgba(0,0,0,0.6)] ${meta.ringClass}`}
                               >
                                 <div className="flex items-start justify-between gap-4">
-                                  <h4 className="font-semibold text-zinc-950">{item.skill}</h4>
+                                  <h4 className="font-semibold text-zinc-950 dark:text-zinc-50">{item.skill}</h4>
                                   <span
                                     className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ring-inset ${meta.chipClass}`}
                                   >
@@ -470,7 +501,7 @@ export function SkillGapAnalyzer({
                                     <span>{meta.weight}%</span>
                                   </div>
                                   <div
-                                    className="mt-1 h-2 w-full overflow-hidden rounded-full bg-zinc-100"
+                                    className="mt-1 h-2 w-full overflow-hidden rounded-full bg-zinc-200/70 dark:bg-zinc-700"
                                     role="progressbar"
                                     aria-valuenow={meta.weight}
                                     aria-valuemin={0}
@@ -482,7 +513,7 @@ export function SkillGapAnalyzer({
                                     />
                                   </div>
                                 </div>
-                                <p className="mt-3 text-sm leading-6 text-zinc-600">{item.reason}</p>
+                                <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">{item.reason}</p>
                               </article>
                             ))}
                           </div>
@@ -491,7 +522,7 @@ export function SkillGapAnalyzer({
                     })}
                   </div>
                 ) : (
-                  <p className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                  <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900/60 dark:bg-emerald-950/40">
                     No significant skill gaps were identified for this target.
                   </p>
                 )}
@@ -500,8 +531,8 @@ export function SkillGapAnalyzer({
           </div>
         ) : hasProfile ? (
           <div className="py-14 text-center">
-            <h2 className="text-lg font-semibold text-zinc-950">No skill gap report yet</h2>
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-600">
+            <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">No skill gap report yet</h2>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-600 dark:text-zinc-400">
               Choose a target role and destination to generate your first prioritized skills plan.
             </p>
           </div>

@@ -99,3 +99,58 @@ html {
     @apply font-serif;
   }
 }
+
+/* Uiverse.io loading spinner (kennyotsu) - plain, no card chrome */
+.uv-card {
+  padding: 0;
+}
+.uv-loader {
+  color: #a1a1aa;
+  font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  box-sizing: content-box;
+  height: 26px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.uv-words {
+  overflow: hidden;
+  position: relative;
+  height: 26px;
+}
+.uv-word {
+  display: block;
+  height: 100%;
+  padding-left: 6px;
+  color: #059669;
+  animation: uv-spin 4s infinite;
+}
+@keyframes uv-spin {
+  10% {
+    transform: translateY(-102%);
+  }
+  25% {
+    transform: translateY(-100%);
+  }
+  35% {
+    transform: translateY(-202%);
+  }
+  50% {
+    transform: translateY(-200%);
+  }
+  60% {
+    transform: translateY(-302%);
+  }
+  75% {
+    transform: translateY(-300%);
+  }
+  85% {
+    transform: translateY(-402%);
+  }
+  100% {
+    transform: translateY(-400%);
+  }
+}
