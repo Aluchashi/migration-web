@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { GlobalSearchIcon } from "@hugeicons/core-free-icons";
 
 import {
   DEFAULT_WEIGHTS,
@@ -21,6 +23,10 @@ type CareerMatcherProps = {
 };
 
 type SortKey = "score" | "salary" | "cost" | "timeline" | "demand";
+
+const ICON_TILE = "bg-muted dark:bg-muted/10 mb-0 size-fit rounded-xl p-px";
+const ICON_INNER =
+  "flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 shadow-[inset_0_-2px_0.5px_0px_rgba(0,0,0,0),inset_0px_2px_0_2px_rgba(255,255,255,1),0_0px_6px_0_rgba(0,0,0,0.07),0_2px_4px_0_rgba(0,0,0,0.05)] dark:bg-black/20 dark:shadow-[inset_0_-1px_0px_0px_rgba(0,0,0,0.1),inset_0px_1px_0px_0px_rgba(255,255,255,0.05),0_0px_2px_0_rgba(0,0,0,0.2),0_1px_4px_0_rgba(0,0,0,0.05)]";
 
 const demandRank: Record<string, number> = { high: 3, medium: 2, low: 1 };
 
@@ -81,8 +87,8 @@ function SubscoreBar({ label, value }: { label: string; value: number }) {
         <span>{label}</span>
         <span className="font-semibold text-zinc-800">{value}%</span>
       </div>
-      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-100">
-        <div className="h-full rounded-full bg-zinc-700" style={{ width: `${value}%` }} />
+      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-200/70 dark:bg-zinc-700">
+        <div className="h-full rounded-full bg-emerald-600" style={{ width: `${value}%` }} />
       </div>
     </div>
   );
@@ -102,62 +108,80 @@ function MatchCard({
   const eligibility = eligibilityMeta[result.eligibility];
 
   return (
-    <article className="flex flex-col rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+    <article className="group flex flex-col rounded-3xl bg-muted/50 p-6 shadow-none ring-0 transition-all duration-300 hover:shadow-[0_12px_34px_rgba(0,0,0,0.16)] dark:hover:shadow-[0_12px_34px_rgba(0,0,0,0.6)]">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <Link
-            href={`/dashboard/career-matcher/${result.corridorId}`}
-            className="font-semibold leading-snug text-zinc-950 hover:text-emerald-700 hover:underline underline-offset-2"
-          >
-            {result.jobTitle} &mdash; {result.country}
-          </Link>
-          <p className="mt-1 text-xs text-zinc-500">{result.category}</p>
+        <div className="flex items-start gap-3">
+          <div className={ICON_TILE}>
+            <div className={ICON_INNER}>
+              <HugeiconsIcon icon={GlobalSearchIcon} className="h-5 w-5 text-emerald-500" />
+            </div>
+          </div>
+          <div className="min-w-0">
+            <Link
+              href={`/dashboard/career-matcher/${result.corridorId}`}
+              className="block font-semibold leading-snug text-zinc-950 hover:text-emerald-700 hover:underline underline-offset-2 dark:text-zinc-50"
+            >
+              {result.jobTitle} &mdash; {result.country}
+            </Link>
+            <p className="mt-1 text-xs text-zinc-500">{result.category}</p>
+          </div>
         </div>
-        <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${eligibility.className}`}>
+        <span
+          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${eligibility.className}`}
+        >
           {eligibility.label}
         </span>
       </div>
 
-      <div className="mt-4">
-        <div className="flex items-center justify-between text-sm">
-          <span className="font-medium text-zinc-600">Match score</span>
-          <span className="font-bold text-zinc-950">{result.matchScore}%</span>
+      <div className="mt-5">
+        <div className="flex items-end justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Match score</span>
+          <span className="text-2xl font-extrabold leading-none text-zinc-950 dark:text-zinc-50">
+            {result.matchScore}%
+          </span>
         </div>
         <div
-          className="mt-1.5 h-2 overflow-hidden rounded-full bg-zinc-100"
+          className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200/70 dark:bg-zinc-700"
           role="progressbar"
           aria-label={`${result.jobTitle} match score`}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={result.matchScore}
         >
-          <div className="h-full rounded-full bg-emerald-600" style={{ width: `${result.matchScore}%` }} />
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600"
+            style={{ width: `${result.matchScore}%` }}
+          />
         </div>
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+      <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Salary</dt>
-          <dd className="mt-0.5 font-medium text-zinc-800">{result.salaryLabel}</dd>
+          <dd className="mt-0.5 font-medium text-zinc-800 dark:text-zinc-100">{result.salaryLabel}</dd>
         </div>
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Migration cost</dt>
-          <dd className="mt-0.5 font-medium text-zinc-800">{result.costLabel}</dd>
+          <dd className="mt-0.5 font-medium text-zinc-800 dark:text-zinc-100">{result.costLabel}</dd>
         </div>
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Timeline</dt>
-          <dd className="mt-0.5 font-medium text-zinc-800">{result.timelineLabel}</dd>
+          <dd className="mt-0.5 font-medium text-zinc-800 dark:text-zinc-100">{result.timelineLabel}</dd>
         </div>
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Demand</dt>
-          <dd className="mt-0.5 flex items-center gap-1.5 font-medium capitalize text-zinc-800">
-            <span className={`h-1.5 w-1.5 rounded-full ${result.demandLevel === "high" ? "bg-emerald-500" : result.demandLevel === "medium" ? "bg-amber-400" : "bg-zinc-300"}`} />
+          <dd className="mt-0.5 flex items-center gap-1.5 font-medium capitalize text-zinc-800 dark:text-zinc-100">
+            <span
+              className={`h-1.5 w-1.5 rounded-full ${result.demandLevel === "high" ? "bg-emerald-500" : result.demandLevel === "medium" ? "bg-amber-400" : "bg-zinc-300"}`}
+            />
             {result.demandLevel}
           </dd>
         </div>
       </dl>
 
-      <p className={`mt-4 inline-flex w-fit items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${result.confidence === "verified" ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-orange-50 text-orange-700 ring-orange-200"}`}>
+      <p
+        className={`mt-5 inline-flex w-fit items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${result.confidence === "verified" ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-orange-50 text-orange-700 ring-orange-200"}`}
+      >
         {result.confidence === "verified" ? "High confidence (official data)" : "Estimated (limited data)"}
       </p>
 
@@ -175,9 +199,9 @@ function MatchCard({
       ) : null}
 
       {result.whatIf.length > 0 ? (
-        <div className="mt-4 rounded-md border border-sky-100 bg-sky-50 px-3 py-2.5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-sky-700">What if?</p>
-          <ul className="mt-1 space-y-1 text-xs leading-5 text-sky-900">
+        <div className="mt-4 rounded-xl border border-sky-100 bg-sky-50 px-3 py-2.5 dark:border-sky-900/50 dark:bg-sky-950/40">
+          <p className="text-xs font-semibold uppercase tracking-wide text-sky-700 dark:text-sky-300">What if?</p>
+          <ul className="mt-1 space-y-1 text-xs leading-5 text-sky-900 dark:text-sky-100">
             {result.whatIf.map((scenario) => (
               <li key={scenario.action}>
                 Complete <strong>{scenario.action}</strong> &rarr; score becomes{" "}
@@ -188,12 +212,16 @@ function MatchCard({
         </div>
       ) : null}
 
-      <details className="group mt-4 rounded-md border border-zinc-200 open:bg-zinc-50">
-        <summary className="cursor-pointer select-none px-3 py-2 text-sm font-semibold text-zinc-700 marker:content-none hover:text-zinc-950">
+      <details className="group/details mt-4 rounded-xl border border-zinc-200 open:bg-zinc-50/70 dark:border-zinc-800 dark:open:bg-zinc-900/40">
+        <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2.5 text-sm font-semibold text-zinc-700 hover:text-zinc-950 dark:text-zinc-200 dark:hover:text-zinc-50">
           Why this match?
-          <span className="ml-2 inline-block text-xs font-normal text-zinc-400 transition group-open:rotate-180">&#9662;</span>
+          <span className="inline-block text-zinc-400 transition group-open/details:rotate-180">
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
         </summary>
-        <div className="space-y-3 border-t border-zinc-200 px-3 pb-3 pt-3">
+        <div className="space-y-3 border-t border-zinc-200 px-3 pb-3 pt-3 dark:border-zinc-800">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">How we calculated this</p>
             <div className="mt-2 space-y-2">
@@ -210,7 +238,7 @@ function MatchCard({
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Explanation</p>
-            <ul className="mt-1.5 list-disc space-y-1 pl-4 text-xs leading-5 text-zinc-700">
+            <ul className="mt-1.5 list-disc space-y-1 pl-4 text-xs leading-5 text-zinc-700 dark:text-zinc-300">
               {result.explanationBn.map((line) => (
                 <li key={line}>{line}</li>
               ))}
@@ -219,11 +247,11 @@ function MatchCard({
         </div>
       </details>
 
-      <div className="mt-auto pt-4">
+      <div className="mt-auto pt-5">
         <div className="flex flex-wrap items-center gap-2">
           <Link
             href={`/dashboard/skill-gap?job=${encodeURIComponent(result.jobTitle)}&country=${encodeURIComponent(result.country)}`}
-            className="inline-flex h-9 items-center rounded-md bg-zinc-950 px-3 text-xs font-semibold text-white transition hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+            className="inline-flex h-9 items-center rounded-xl bg-emerald-600 px-3 text-xs font-semibold text-white transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
           >
             View skill gap
           </Link>
@@ -231,7 +259,7 @@ function MatchCard({
             type="button"
             disabled
             title="Legal migration guidance module is coming soon"
-            className="inline-flex h-9 cursor-not-allowed items-center rounded-md border border-zinc-200 px-3 text-xs font-semibold text-zinc-400"
+            className="inline-flex h-9 cursor-not-allowed items-center rounded-xl border border-zinc-200 px-3 text-xs font-semibold text-zinc-400 dark:border-zinc-700"
           >
             Legal process
           </button>
@@ -239,17 +267,17 @@ function MatchCard({
             type="button"
             disabled
             title="Agency verification module is coming soon"
-            className="inline-flex h-9 cursor-not-allowed items-center rounded-md border border-zinc-200 px-3 text-xs font-semibold text-zinc-400"
+            className="inline-flex h-9 cursor-not-allowed items-center rounded-xl border border-zinc-200 px-3 text-xs font-semibold text-zinc-400 dark:border-zinc-700"
           >
             Verify agency
           </button>
-          <label className="ml-auto inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-zinc-600">
+          <label className="ml-auto inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300">
             <input
               type="checkbox"
               checked={comparable}
               disabled={!comparable && compareFull}
               onChange={onToggleCompare}
-              className="h-3.5 w-3.5 rounded border-zinc-300"
+              className="h-3.5 w-3.5 rounded border-zinc-300 accent-emerald-600"
             />
             Compare
           </label>
@@ -305,16 +333,18 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
 
   return (
     <>
-      <div className="border-b border-zinc-200 pb-7">
+      <div className="border-b border-zinc-200 pb-7 dark:border-zinc-800">
         <p className="text-sm font-medium text-emerald-700">AI pre-migration intelligence</p>
-        <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl">Career &amp; Country Matcher</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600">
+        <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl dark:text-zinc-50">
+          Career &amp; Country Matcher
+        </h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
           Realistic country and job options ranked against your saved profile by a transparent,
           rule-based scoring engine - no forms to fill again, no black-box scores.
         </p>
       </div>
 
-      <p className="mt-5 rounded-md border border-zinc-200 bg-zinc-50 px-4 py-3 text-xs leading-5 text-zinc-600">
+      <p className="mt-5 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-xs leading-5 text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-300">
         Scores come from your saved profile checked against a curated dataset of migration corridors
         (BMET demand patterns, embassy rules, BOESL postings). Salary and cost figures are estimates
         tagged with their source and verification date - always confirm with BMET or the destination
@@ -322,7 +352,7 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
       </p>
 
       {!snapshot ? (
-        <div className="mt-6 border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="mt-6 rounded-2xl border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:bg-amber-950/40">
           Your profile does not have enough career data yet. Complete these first:
           <ul className="mt-2 list-disc pl-5">
             {essentialGaps.map((gap) => (
@@ -339,7 +369,7 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
       ) : null}
 
       {snapshot && essentialGaps.length > 0 ? (
-        <div className="mt-6 border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="mt-6 rounded-2xl border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:bg-amber-950/40">
           Recommendations improve when you complete your profile. Missing:
           {" "}
           {essentialGaps.join(", ")}.{" "}
@@ -351,9 +381,9 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
 
       {snapshot && allResults.length > 0 ? (
         <>
-          <section aria-labelledby="priority-heading" className="mt-8 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+          <section aria-labelledby="priority-heading" className="mt-8 rounded-3xl bg-muted/50 p-6">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 id="priority-heading" className="font-semibold text-zinc-950">
+              <h2 id="priority-heading" className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">
                 Priority weighting
               </h2>
               <button
@@ -370,7 +400,10 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
             <div className="mt-4 grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
               {WEIGHT_FIELDS.map((field) => (
                 <div key={field.key}>
-                  <label htmlFor={`weight-${field.key}`} className="flex items-center justify-between text-sm font-medium text-zinc-800">
+                  <label
+                    htmlFor={`weight-${field.key}`}
+                    className="flex items-center justify-between text-sm font-medium text-zinc-800 dark:text-zinc-100"
+                  >
                     <span>{field.label}</span>
                     <span className="text-xs font-bold text-emerald-700">
                       {Math.round((weights[field.key] / weightTotal) * 100)}%
@@ -399,14 +432,17 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
               Filter and sort
             </h2>
             <div>
-              <label htmlFor="sort-key" className="block text-xs font-semibold uppercase tracking-wide text-zinc-400">
+              <label
+                htmlFor="sort-key"
+                className="block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+              >
                 Sort by
               </label>
               <select
                 id="sort-key"
                 value={sortKey}
                 onChange={(event) => setSortKey(event.target.value as SortKey)}
-                className="mt-1 h-10 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                className="mt-1 h-10 rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
               >
                 <option value="score">Match score</option>
                 <option value="salary">Salary (high first)</option>
@@ -416,14 +452,17 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
               </select>
             </div>
             <div>
-              <label htmlFor="region-filter" className="block text-xs font-semibold uppercase tracking-wide text-zinc-400">
+              <label
+                htmlFor="region-filter"
+                className="block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+              >
                 Region
               </label>
               <select
                 id="region-filter"
                 value={regionFilter}
                 onChange={(event) => setRegionFilter(event.target.value)}
-                className="mt-1 h-10 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                className="mt-1 h-10 rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
               >
                 <option value="all">All regions</option>
                 {REGION_OPTIONS.map((region) => (
@@ -434,14 +473,17 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
               </select>
             </div>
             <div>
-              <label htmlFor="category-filter" className="block text-xs font-semibold uppercase tracking-wide text-zinc-400">
+              <label
+                htmlFor="category-filter"
+                className="block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+              >
                 Job category
               </label>
               <select
                 id="category-filter"
                 value={categoryFilter}
                 onChange={(event) => setCategoryFilter(event.target.value)}
-                className="mt-1 h-10 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                className="mt-1 h-10 rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
               >
                 <option value="all">All categories</option>
                 {categories.map((category) => (
@@ -463,13 +505,19 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
           </section>
 
           {compared.length >= 2 ? (
-            <section aria-labelledby="compare-heading" className="mt-6 overflow-x-auto rounded-lg border border-zinc-200 bg-white shadow-sm">
-              <h2 id="compare-heading" className="border-b border-zinc-200 px-5 py-3 font-semibold text-zinc-950">
+            <section
+              aria-labelledby="compare-heading"
+              className="mt-6 overflow-x-auto rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+            >
+              <h2
+                id="compare-heading"
+                className="border-b border-zinc-200 px-5 py-3 font-semibold text-zinc-950 dark:border-zinc-800 dark:text-zinc-50"
+              >
                 Side-by-side comparison
               </h2>
               <table className="w-full min-w-[640px] text-sm">
                 <thead>
-                  <tr className="border-b border-zinc-200 bg-zinc-50 text-left text-xs uppercase tracking-wide text-zinc-500">
+                  <tr className="border-b border-zinc-200 bg-zinc-50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/60">
                     <th className="px-5 py-2.5 font-semibold">Attribute</th>
                     {compared.map((item) => (
                       <th key={item.corridorId} className="px-5 py-2.5 font-semibold">
@@ -478,7 +526,7 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100">
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                   {[
                     { label: "Match score", render: (item: MatchResult) => `${item.matchScore}%` },
                     { label: "Eligibility", render: (item: MatchResult) => eligibilityMeta[item.eligibility].label },
@@ -499,7 +547,10 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
                     <tr key={row.label}>
                       <td className="px-5 py-2.5 font-medium text-zinc-500">{row.label}</td>
                       {compared.map((item) => (
-                        <td key={`${row.label}-${item.corridorId}`} className="px-5 py-2.5 text-zinc-800">
+                        <td
+                          key={`${row.label}-${item.corridorId}`}
+                          className="px-5 py-2.5 text-zinc-800 dark:text-zinc-100"
+                        >
                           {row.render(item)}
                         </td>
                       ))}
@@ -521,16 +572,21 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
                   <div className="mb-4 flex items-start gap-2.5">
                     <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${meta.dotClass}`} />
                     <div>
-                      <h2 id={`${tier}-heading`} className="text-xl font-semibold text-zinc-950">
+                      <h2
+                        id={`${tier}-heading`}
+                        className="flex items-center text-xl font-semibold text-zinc-950 dark:text-zinc-50"
+                      >
                         {meta.title}
-                        <span className={`ml-2.5 rounded-full px-2 py-0.5 align-middle text-xs font-semibold ring-1 ring-inset ${meta.badgeClass}`}>
+                        <span
+                          className={`ml-2.5 rounded-full px-2 py-0.5 align-middle text-xs font-semibold ring-1 ring-inset ${meta.badgeClass}`}
+                        >
                           {items.length}
                         </span>
                       </h2>
-                      <p className="mt-1 text-sm text-zinc-600">{meta.blurb}</p>
+                      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{meta.blurb}</p>
                     </div>
                   </div>
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <div className="grid gap-6 md:grid-cols-2">
                     {items.map((result) => (
                       <MatchCard
                         key={result.corridorId}
@@ -547,8 +603,10 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
 
             {filteredResults.length === 0 ? (
               <div className="py-14 text-center">
-                <h2 className="text-lg font-semibold text-zinc-950">No corridors match these filters</h2>
-                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-600">
+                <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">
+                  No corridors match these filters
+                </h2>
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-600 dark:text-zinc-400">
                   Try clearing the region or category filter to see every option.
                 </p>
               </div>

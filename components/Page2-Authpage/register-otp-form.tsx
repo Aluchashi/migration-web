@@ -11,7 +11,6 @@ import {
   LockIcon,
   MailIcon,
 } from "@/components/Elements/floating-field";
-import { SwitchMode } from "@/components/Elements/switch-mode";
 import { BrandLogo } from "@/components/Elements/brand-logo";
 
 function PhoneIcon() {
@@ -173,7 +172,6 @@ export function RegisterOtpForm() {
           <BrandLogo />
         </Link>
         <div className="flex items-center gap-3">
-          <SwitchMode accent="orange" />
           <Link
             href="/login"
             className="rounded-lg border border-orange-200 bg-white/75 px-4 py-2 text-sm font-semibold text-orange-900 shadow-sm backdrop-blur transition-all duration-200 hover:-translate-y-px hover:border-orange-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 sm:px-5"

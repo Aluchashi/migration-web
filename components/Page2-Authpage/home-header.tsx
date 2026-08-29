@@ -3,7 +3,6 @@
 import Link from "next/link";
 
 import { UserIcon } from "@/components/Elements/floating-field";
-import { SwitchMode } from "@/components/Elements/switch-mode";
 import { BrandLogo } from "@/components/Elements/brand-logo";
 
 type HomeHeaderProps = {
@@ -21,8 +20,6 @@ export function HomeHeader({ authenticated }: HomeHeaderProps) {
       </Link>
 
       <div className="flex items-center gap-3 sm:gap-4">
-        <SwitchMode />
-
         {authenticated ? (
           <Link
             href="/dashboard/profile"

@@ -9,8 +9,6 @@ import { Label } from "@/components/ui/label";
 import { updateAccount } from "@/app/actions/settings";
 import { cn } from "@/lib/utils";
 
-type Theme = "light" | "dark" | "system";
-
 type SettingsUser = {
   name?: string | null;
   email?: string | null;
@@ -99,15 +97,10 @@ function SubmitButton() {
 
 export function SettingsForm({ user }: { user: SettingsUser }) {
   const [state, formAction] = useFormState(updateAccount, {});
-  const [theme, setTheme] = React.useState<Theme>("system");
   const [notif, setNotif] = React.useState({ email: true, sms: false, product: true });
   const [twoFactor, setTwoFactor] = React.useState(false);
 
   React.useEffect(() => {
-    const storedTheme = (localStorage.getItem("mw-theme") as Theme | null) ?? "system";
-    setTheme(storedTheme);
-    applyTheme(storedTheme);
-
     const rawNotif = localStorage.getItem("mw-notifications");
     if (rawNotif) {
       try {
@@ -122,21 +115,6 @@ export function SettingsForm({ user }: { user: SettingsUser }) {
     }
   }, []);
 
-  function applyTheme(value: Theme) {
-    const root = document.documentElement;
-    const dark =
-      value === "dark" ||
-      (value === "system" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
-    root.classList.toggle("dark", dark);
-  }
-
-  function chooseTheme(value: Theme) {
-    setTheme(value);
-    localStorage.setItem("mw-theme", value);
-    applyTheme(value);
-  }
-
   function setNotifKey(key: keyof typeof notif, value: boolean) {
     const next = { ...notif, [key]: value };
     setNotif(next);
@@ -147,12 +125,6 @@ export function SettingsForm({ user }: { user: SettingsUser }) {
     setTwoFactor(value);
     localStorage.setItem("mw-2fa", value ? "1" : "0");
   }
-
-  const themes: { value: Theme; label: string }[] = [
-    { value: "light", label: "Light" },
-    { value: "dark", label: "Dark" },
-    { value: "system", label: "System" },
-  ];
 
   return (
     <div className="mt-8 space-y-6">
@@ -202,29 +174,6 @@ export function SettingsForm({ user }: { user: SettingsUser }) {
             <SubmitButton />
           </div>
         </form>
-      </Card>
-
-      <Card
-        title="Appearance"
-        description="Choose how the interface looks. System follows your device setting."
-      >
-        <div className="inline-flex rounded-lg border border-zinc-200 bg-zinc-50 p-1">
-          {themes.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => chooseTheme(option.value)}
-              className={cn(
-                "rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600",
-                theme === option.value
-                  ? "bg-white text-zinc-950 shadow-sm"
-                  : "text-zinc-500 hover:text-zinc-800",
-              )}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
       </Card>
 
       <Card

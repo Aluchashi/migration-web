@@ -12,7 +12,6 @@ import {
   MailIcon,
   UserIcon,
 } from "@/components/Elements/floating-field";
-import { SwitchMode } from "@/components/Elements/switch-mode";
 import { BrandLogo } from "@/components/Elements/brand-logo";
 import type { AuthActionState } from "@/app/actions/auth";
 
@@ -48,7 +47,6 @@ function AuthHeader({ mode }: Pick<AuthFormProps, "mode">) {
       </Link>
 
       <div className="flex items-center gap-3">
-        <SwitchMode accent="purple" />
         <Link
           href={isLogin ? "/register" : "/login"}
           className="rounded-lg border border-purple-200 bg-white/75 px-4 py-2 text-sm font-semibold text-purple-900 shadow-sm backdrop-blur transition-all duration-200 hover:-translate-y-px hover:border-purple-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 sm:px-5"
