@@ -35,7 +35,7 @@ export default async function LegalGuidancePage({
   }
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <LegalGuidance
         steps={PRE_DEPARTURE_STEPS}
         countries={Object.values(COUNTRY_LEGAL)}
@@ -43,6 +43,6 @@ export default async function LegalGuidancePage({
         initialCorridorId={initialCorridorId}
         progressByCorridor={progressByCorridor}
       />
-    </main>
+    </div>
   );
 }

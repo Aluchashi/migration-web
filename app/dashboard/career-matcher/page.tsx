@@ -8,7 +8,7 @@ import { buildSnapshot } from "@/lib/profile-snapshot";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "Career Matcher | Migration Web",
+  title: "Career Matcher | Porizayi",
 };
 
 export default async function CareerMatcherPage() {
@@ -50,11 +50,11 @@ export default async function CareerMatcherPage() {
       : essentialGaps;
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <CareerMatcher
         snapshot={hasAnyCoreData ? snapshot : null}
         essentialGaps={effectiveGaps}
       />
-    </main>
+    </div>
   );
 }

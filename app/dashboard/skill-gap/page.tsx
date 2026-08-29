@@ -9,7 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { parseSkillGap } from "@/lib/skill-gap";
 
 export const metadata: Metadata = {
-  title: "Skill Gap Analyzer | Migration Web",
+  title: "Skill Gap Analyzer | Porizayi",
 };
 
 function unique(values: string[]) {
@@ -79,7 +79,7 @@ export default async function SkillGapPage({
   }));
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <SkillGapAnalyzer
         hasProfile={hasProfile}
         jobSuggestions={unique([
@@ -95,6 +95,6 @@ export default async function SkillGapPage({
         initialCountry={typeof searchParams.country === "string" ? searchParams.country : undefined}
         matchSuggestions={matcherSuggestions}
       />
-    </main>
+    </div>
   );
 }

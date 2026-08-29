@@ -5,7 +5,7 @@ import { LearningMap } from "@/components/Page8-Roadmap/learning-roadmap";
 import { getAuthenticatedUser } from "@/lib/auth-user";
 import { prisma } from "@/lib/prisma";
 
-export const metadata: Metadata = { title: "Learning Roadmap | Migration Web" };
+export const metadata: Metadata = { title: "Learning Roadmap | Porizayi" };
 
 type ProfileSummary = {
   currentJob: string | null;
@@ -65,8 +65,8 @@ export default async function LearningRoadmapPage() {
   };
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <LearningMap hasProfile={hasProfile} profile={profileSummary} />
-    </main>
+    </div>
   );
 }

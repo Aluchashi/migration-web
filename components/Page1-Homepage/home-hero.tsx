@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { BrandLogo } from "@/components/Elements/brand-logo";
+
 const metrics = [
   ["Career Match", "Profile-based", "bg-emerald-500"],
   ["Skill Readiness", "Prioritized", "bg-sky-500"],
@@ -25,5 +27,30 @@ function ProductOverviewVisual() {
 }
 
 export function HomeHero() {
-  return <section className="border-b border-emerald-100 bg-[radial-gradient(circle_at_top_left,_#d1fae5,_transparent_38%),linear-gradient(to_bottom,_#f0fdf4,_#fafaf9)]"><div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:gap-16"><div className="max-w-2xl"><p className="inline-flex rounded-full border border-emerald-200 bg-white/80 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-800 shadow-sm">A clearer path forward</p><h1 className="mt-5 text-4xl font-semibold leading-[1.06] tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">Go Abroad for Work. Go Prepared.</h1><p className="mt-6 max-w-xl text-base leading-7 text-zinc-600 sm:text-lg">Plan your career, sharpen your skills, and move forward with migration guidance you can understand.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Link href="/register" className="inline-flex h-11 items-center justify-center rounded-lg bg-emerald-700 px-5 text-sm font-semibold text-white shadow-lg shadow-emerald-800/15 transition hover:-translate-y-px hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2">Start Your Journey</Link><a href="#how-it-works" className="inline-flex h-11 items-center justify-center rounded-lg border border-emerald-200 bg-white/90 px-5 text-sm font-semibold text-emerald-900 transition hover:-translate-y-px hover:border-emerald-300 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2">Explore How It Works</a></div></div><ProductOverviewVisual /></div></section>;
+  return (
+    <section className="border-b border-emerald-100">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 pt-5 sm:px-6">
+        <Link
+          href="/"
+          className="flex shrink-0 items-center gap-2.5 rounded-xl outline-none transition-transform hover:-translate-y-px focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+        >
+          <BrandLogo />
+        </Link>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/login"
+            className="rounded-lg px-4 py-2 text-sm font-semibold text-zinc-700 transition-all hover:-translate-y-px hover:bg-emerald-50 hover:text-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+          >
+            Login
+          </Link>
+          <Link
+            href="/register"
+            className="rounded-lg border border-emerald-700 bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:border-emerald-800 hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+          >
+            Register
+          </Link>
+        </div>
+      </div>
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:gap-16"><div className="max-w-2xl"><p className="inline-flex rounded-full border border-emerald-200 bg-white/80 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-800 shadow-sm">A clearer path forward</p><h1 className="mt-5 text-4xl font-semibold leading-[1.06] tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">Go Abroad for Work. Go Prepared.</h1><p className="mt-6 max-w-xl text-base leading-7 text-zinc-600 sm:text-lg">Plan your career, sharpen your skills, and move forward with migration guidance you can understand.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Link href="/register" className="inline-flex h-11 items-center justify-center rounded-lg bg-emerald-700 px-5 text-sm font-semibold text-white shadow-lg shadow-emerald-800/15 transition hover:-translate-y-px hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2">Start Your Journey</Link><a href="#how-it-works" className="inline-flex h-11 items-center justify-center rounded-lg border border-emerald-200 bg-white/90 px-5 text-sm font-semibold text-emerald-900 transition hover:-translate-y-px hover:border-emerald-300 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2">Explore How It Works</a></div></div><ProductOverviewVisual /></div></section>
+  );
 }

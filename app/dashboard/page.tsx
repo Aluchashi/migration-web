@@ -19,7 +19,7 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <p className="text-sm font-medium text-emerald-700">Dashboard</p>
       <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl">
         Welcome, {user.name ?? "there"}.
@@ -79,6 +79,6 @@ export default async function DashboardPage() {
           <p className="mt-2 text-sm leading-6 text-zinc-600">Screen a recruitment agency against common warning signs before you pay.</p>
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

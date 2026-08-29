@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { UserIcon } from "@/components/Elements/floating-field";
 import { SwitchMode } from "@/components/Elements/switch-mode";
+import { BrandLogo } from "@/components/Elements/brand-logo";
 
 type HomeHeaderProps = {
   authenticated: boolean;
@@ -16,15 +17,7 @@ export function HomeHeader({ authenticated }: HomeHeaderProps) {
         href="/"
         className="flex items-center gap-2.5 rounded-xl outline-none transition-transform duration-200 hover:-translate-y-px focus-visible:ring-2 focus-visible:ring-white/70"
       >
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-sky-700 shadow-md shadow-sky-900/30">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="h-5 w-5">
-            <path d="M21 3 3 10.5l6.5 2L11.5 19l3-6L21 3Z" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="m9.5 12.5 11.5-9.5-9.5 11.5" strokeLinecap="round" strokeLinejoin="round" fill="rgba(255,255,255,0.25)" />
-          </svg>
-        </span>
-        <span className="text-base font-bold tracking-tight text-white drop-shadow-sm sm:text-lg">
-          Migration Web
-        </span>
+        <BrandLogo className="h-9 w-auto drop-shadow-sm" />
       </Link>
 
       <div className="flex items-center gap-3 sm:gap-4">

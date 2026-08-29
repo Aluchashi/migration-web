@@ -13,6 +13,7 @@ import {
   UserIcon,
 } from "@/components/Elements/floating-field";
 import { SwitchMode } from "@/components/Elements/switch-mode";
+import { BrandLogo } from "@/components/Elements/brand-logo";
 import type { AuthActionState } from "@/app/actions/auth";
 
 type AuthAction = (
@@ -33,17 +34,6 @@ type FieldName =
   | "password"
   | "confirmPassword";
 
-function BrandMark() {
-  return (
-    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 shadow-md shadow-emerald-900/25">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="h-5 w-5">
-        <path d="M21 3 3 10.5l6.5 2L11.5 19l3-6L21 3Z" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="m9.5 12.5 11.5-9.5-9.5 11.5" strokeLinecap="round" strokeLinejoin="round" fill="rgba(255,255,255,0.25)" />
-      </svg>
-    </span>
-  );
-}
-
 function AuthHeader({ mode }: Pick<AuthFormProps, "mode">) {
   const isLogin = mode === "login";
 
@@ -54,10 +44,7 @@ function AuthHeader({ mode }: Pick<AuthFormProps, "mode">) {
         className="flex items-center gap-2.5 rounded-xl outline-none transition-transform duration-200 hover:-translate-y-px focus-visible:ring-2 focus-visible:ring-white/70"
         aria-label="Back to homepage"
       >
-        <BrandMark />
-        <span className="text-lg font-bold tracking-tight text-emerald-950 dark:text-emerald-300 sm:text-xl">
-          Migration Web
-        </span>
+        <BrandLogo />
       </Link>
 
       <div className="flex items-center gap-3">

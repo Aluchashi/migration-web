@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { logout } from "@/app/actions/auth";
+import { BrandLogo } from "@/components/Elements/brand-logo";
 
 type NavbarProps = {
   authenticated: boolean;
@@ -21,7 +22,11 @@ function linkClass(active: boolean) {
 export function Navbar({ authenticated }: NavbarProps) {
   const pathname = usePathname();
 
-  if (pathname === "/login" || pathname === "/register") {
+  if (
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname.startsWith("/dashboard")
+  ) {
     return null;
   }
 
@@ -35,13 +40,7 @@ export function Navbar({ authenticated }: NavbarProps) {
           href="/"
           className="flex shrink-0 items-center gap-2.5 rounded-xl outline-none transition-transform hover:-translate-y-px focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-4"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-md shadow-emerald-700/20" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" className="h-5 w-5">
-              <path d="M21 3 3 10.5l6.5 2L11.5 19l3-6L21 3Z" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="m9.5 12.5 11.5-9.5-9.5 11.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-          <span className="text-lg font-bold tracking-tight text-zinc-950 sm:text-xl">Migration Web</span>
+          <BrandLogo />
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">

@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="flex items-center gap-3">
         <span
           className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-300 border-t-emerald-600"
@@ -22,6 +22,6 @@ export default function Loading() {
         <div className="h-40 animate-pulse rounded-lg border border-zinc-200 bg-zinc-100" />
         <div className="h-64 animate-pulse rounded-lg border border-zinc-200 bg-zinc-100" />
       </div>
-    </main>
+    </div>
   );
 }

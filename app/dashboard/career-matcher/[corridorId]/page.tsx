@@ -9,7 +9,7 @@ import { buildSnapshot } from "@/lib/profile-snapshot";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "Career Detail | Migration Web",
+  title: "Career Detail | Porizayi",
 };
 
 export function generateStaticParams() {
@@ -45,8 +45,8 @@ export default async function CorridorDetailPage({
   const essentialGaps = snapshot ? findEssentialGaps(snapshot) : [];
 
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
       <CorridorDetail corridor={corridor} result={result} essentialGaps={essentialGaps} />
-    </main>
+    </div>
   );
 }

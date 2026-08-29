@@ -6,7 +6,7 @@ import { getAuthenticatedUser } from "@/lib/auth-user";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "Profile | Migration Web",
+  title: "Profile | Porizayi",
 };
 
 function toDateInputValue(date: Date | null) {
@@ -36,7 +36,7 @@ export default async function ProfilePage() {
   });
 
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="mb-8">
         <p className="text-xs font-semibold uppercase tracking-widest text-sky-700">
           Your profile
@@ -86,6 +86,6 @@ export default async function ProfilePage() {
           })),
         }}
       />
-    </main>
+    </div>
   );
 }

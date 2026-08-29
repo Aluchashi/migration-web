@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 
-import { auth } from "@/auth";
-import { Navbar } from "@/components/Elements/navbar";
 import { PageTransition } from "@/components/Elements/page-transition";
 import { Providers } from "@/components/Elements/providers";
 
 import "./globals.css";
+import { Lora, Outfit } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const outfitHeading = Outfit({subsets:['latin'],variable:'--font-heading'});
+
+const lora = Lora({subsets:['latin'],variable:'--font-serif'});
 
 export const metadata: Metadata = {
-  title: "Migration Web",
+  title: "Porizayi",
   description: "Migration planning workspace",
 };
 
@@ -17,13 +21,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={cn("font-serif", lora.variable, outfitHeading.variable)}>
       <body>
         <Providers>
-          <Navbar authenticated={Boolean(session?.user)} />
           <PageTransition>{children}</PageTransition>
         </Providers>
       </body>
