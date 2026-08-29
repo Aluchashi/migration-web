@@ -10,16 +10,31 @@ datasource db {
 
 model User {
   id              String           @id @default(cuid())
-  name            String
-  username        String           @unique
+  name            String?
+  username        String?          @unique
   email           String?          @unique
   phone           String?          @unique
   password        String
+  verified        Boolean          @default(false)
   createdAt       DateTime         @default(now())
   profile          Profile?
   careerMatches    CareerMatch[]
   skillGapReports  SkillGapReport[]
   legalStepProgress LegalStepProgress[]
+}
+
+model PendingRegistration {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  username   String
+  phone      String
+  password   String
+  otp        String
+  otpExpiry  DateTime
+  lastSentAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@index([email])
 }
 
 model Profile {

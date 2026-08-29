@@ -52,7 +52,7 @@ export default async function ProfilePage() {
 
       <ProfileForm
         initialValues={{
-          name: user.name,
+          name: user.name ?? "",
           dateOfBirth: toDateInputValue(profile?.dateOfBirth ?? null),
           nid: profile?.nid ?? "",
           phone: profile?.phone ?? "",

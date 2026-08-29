@@ -55,16 +55,16 @@ function AuthHeader({ mode }: Pick<AuthFormProps, "mode">) {
         aria-label="Back to homepage"
       >
         <BrandMark />
-        <span className="text-lg font-bold tracking-tight text-emerald-950 sm:text-xl">
+        <span className="text-lg font-bold tracking-tight text-emerald-950 dark:text-emerald-300 sm:text-xl">
           Migration Web
         </span>
       </Link>
 
       <div className="flex items-center gap-3">
-        <SwitchMode />
+        <SwitchMode accent="purple" />
         <Link
           href={isLogin ? "/register" : "/login"}
-          className="rounded-lg border border-emerald-200 bg-white/75 px-4 py-2 text-sm font-semibold text-emerald-900 shadow-sm backdrop-blur transition-all duration-200 hover:-translate-y-px hover:border-emerald-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 sm:px-5"
+          className="rounded-lg border border-purple-200 bg-white/75 px-4 py-2 text-sm font-semibold text-purple-900 shadow-sm backdrop-blur transition-all duration-200 hover:-translate-y-px hover:border-purple-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 sm:px-5"
         >
           {isLogin ? "Register" : "Log in"}
         </Link>
@@ -77,13 +77,15 @@ function SubmitButton({ mode }: Pick<AuthFormProps, "mode">) {
   const { pending } = useFormStatus();
 
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="flex w-full items-center justify-center rounded-xl bg-gradient-to-b from-emerald-600 to-emerald-800 px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition-all duration-200 hover:-translate-y-px hover:from-emerald-500 hover:shadow-xl hover:shadow-emerald-900/25 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
-    >
-      {pending ? "Please wait..." : mode === "login" ? "Log in" : "Create account"}
-    </button>
+    <div className="flex justify-center">
+      <button
+        type="submit"
+        disabled={pending}
+        className="inline-flex items-center justify-center rounded-xl bg-gradient-to-b from-purple-400 to-purple-500 px-10 py-3 text-sm font-semibold text-purple-950 shadow-lg shadow-purple-900/20 transition-all duration-200 hover:-translate-y-px hover:from-purple-500 hover:to-purple-600 hover:shadow-xl hover:shadow-purple-900/25 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+      >
+        {pending ? "Please wait..." : mode === "login" ? "Log in" : "Create account"}
+      </button>
+    </div>
   );
 }
 
@@ -160,18 +162,29 @@ export function AuthForm({ action, mode }: AuthFormProps) {
   }
 
   return (
-    <section className="relative flex min-h-screen flex-col overflow-hidden bg-[radial-gradient(circle_at_top_left,_#d1fae5,_transparent_38%),linear-gradient(to_bottom,_#f0fdf4,_#fafaf9)] dark:from-[#062b25] dark:via-[#0d443a] dark:to-[#163a33]">
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[52%]">
-        <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-white via-white/95 to-transparent dark:from-[#163a33] dark:via-[#163a33]/95" />
-        <div className="absolute -bottom-28 -left-[10%] h-80 w-[75%] rounded-full bg-white/90 blur-2xl dark:bg-white/10" />
-        <div className="absolute -bottom-32 left-[25%] h-96 w-[85%] rounded-full bg-white/95 blur-3xl dark:bg-white/[0.12]" />
-        <div className="absolute -bottom-24 right-[-15%] h-80 w-[70%] rounded-full bg-white/90 blur-2xl dark:bg-white/10" />
-        <div className="absolute -bottom-16 left-[5%] h-40 w-[45%] rounded-full bg-emerald-100/80 blur-xl dark:bg-white/[0.06]" />
-        <div className="absolute -bottom-20 right-[10%] h-44 w-[50%] rounded-full bg-emerald-100/70 blur-xl dark:bg-white/[0.05]" />
-        <div className="absolute bottom-40 left-[15%] h-16 w-72 rounded-full bg-white/50 blur-2xl dark:bg-white/[0.08]" />
-        <div className="absolute bottom-48 right-[18%] h-12 w-60 rounded-full bg-white/40 blur-2xl dark:bg-white/[0.06]" />
-        <div className="absolute bottom-64 left-1/2 h-10 w-52 -translate-x-1/2 rounded-full bg-white/30 blur-2xl dark:bg-white/[0.05]" />
-      </div>
+    <section className="relative flex min-h-screen w-full flex-col overflow-hidden bg-white dark:bg-black">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 dark:hidden"
+        style={{
+          background: "#ffffff",
+          backgroundImage:
+            "radial-gradient(circle at top center, rgba(173, 109, 244, 0.5), transparent 70%)",
+          filter: "blur(80px)",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden dark:block"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 50% 100%, rgba(173, 109, 244, 0.6) 0%, transparent 60%),
+            radial-gradient(circle at 50% 100%, rgba(147, 80, 255, 0.4) 0%, transparent 70%),
+            radial-gradient(circle at 50% 100%, rgba(200, 160, 255, 0.3) 0%, transparent 80%)
+          `,
+        }}
+      />
 
       <AuthHeader mode={mode} />
 
@@ -180,10 +193,10 @@ export function AuthForm({ action, mode }: AuthFormProps) {
           initial={{ opacity: 0, y: 22, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ type: "spring", stiffness: 210, damping: 24 }}
-          className="w-full max-w-md rounded-3xl border border-emerald-100 bg-white/85 p-7 shadow-2xl shadow-emerald-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-[#0c2923]/70 dark:shadow-black/40 sm:p-9"
+          className="w-full max-w-md rounded-3xl border border-purple-100 bg-white/85 p-7 shadow-2xl shadow-purple-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-[#0c2923]/70 dark:shadow-black/40 sm:p-9"
         >
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/80 bg-white/90 shadow-lg shadow-sky-900/10 backdrop-blur dark:border-white/10 dark:bg-white/10">
-            <span className="text-emerald-700 dark:text-emerald-300">
+            <span className="text-purple-600 dark:text-purple-300">
               {isLogin ? <UserIcon /> : <AtIcon />}
             </span>
           </div>
@@ -295,7 +308,7 @@ export function AuthForm({ action, mode }: AuthFormProps) {
             {isLogin ? "New here?" : "Already have an account?"}{" "}
             <Link
               href={isLogin ? "/register" : "/login"}
-              className="font-semibold text-emerald-700 underline-offset-4 transition-colors hover:text-emerald-900 hover:underline dark:text-emerald-300 dark:hover:text-emerald-200"
+              className="font-semibold text-purple-700 underline-offset-4 transition-colors hover:text-purple-900 hover:underline dark:text-purple-300 dark:hover:text-purple-200"
             >
               {isLogin ? "Create an account" : "Log in"}
             </Link>

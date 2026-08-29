@@ -1,6 +1,5 @@
-import { register } from "@/app/actions/auth";
-import { AuthForm } from "@/components/Page2-Authpage/auth-form";
+import { RegisterOtpForm } from "@/components/Page2-Authpage/register-otp-form";
 
 export default function RegisterPage() {
-  return <AuthForm action={register} mode="register" />;
+  return <RegisterOtpForm />;
 }
