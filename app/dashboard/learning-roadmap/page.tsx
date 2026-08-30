@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { LearningMap } from "@/components/Page8-Roadmap/Learning-roadmap";
+import { LearningMap } from "@/components/Page8-Roadmap/learning-roadmap";
 import { getAuthenticatedUser } from "@/lib/auth-user";
 import { prisma } from "@/lib/prisma";
 
