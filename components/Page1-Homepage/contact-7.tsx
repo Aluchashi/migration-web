@@ -3,9 +3,12 @@
 import * as React from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
+import { useTranslations } from "next-intl";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Dropdown } from "@/components/Elements/dropdown";
 import { submitContact } from "@/app/actions/contact";
 import { cn } from "@/lib/utils";
 
@@ -32,10 +35,11 @@ function Field({
 }
 
 function SubmitButton({ text }: { text?: string }) {
+  const t = useTranslations("Home");
   const { pending } = useFormStatus();
   return (
     <Button type="submit" disabled={pending}>
-      {pending ? "Sending…" : (text ?? "Send Message")}
+      {pending ? t("contact.sending") : (text ?? t("contact.buttonText"))}
     </Button>
   );
 }
@@ -163,22 +167,13 @@ export function Contact7({
               />
             </Field>
             <Field label={enquiryLabel} htmlFor="contact-enquiry">
-              <select
-                id="contact-enquiry"
+              <Dropdown
+                options={enquiryOptions}
                 name="enquiry"
-                required
                 defaultValue=""
-                className={cn(fieldClasses, "bg-white dark:bg-input/30")}
-              >
-                <option value="" disabled>
-                  {enquiryPlaceholder}
-                </option>
-                {enquiryOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+                placeholder={enquiryPlaceholder}
+                title="Enquiry type"
+              />
             </Field>
           </div>
 

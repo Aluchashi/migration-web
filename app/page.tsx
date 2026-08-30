@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import {
   DashboardPreview,
   FeatureGrid,
@@ -12,6 +14,8 @@ import { Contact7 } from "@/components/Page1-Homepage/contact-7";
 import Footer20 from "@/components/ui/footer-20";
 
 export default function Home() {
+  const t = useTranslations("Home");
+
   return (
     <div className="min-h-screen w-full bg-white relative text-gray-800">
       <div
@@ -35,26 +39,21 @@ export default function Home() {
         <DashboardPreview />
         <FinalCta />
         <Contact7
-          subheading="CONNECT WITH US"
-          heading="Let's Start a Conversation"
-          nameLabel="Full Name *"
+          subheading={t("contact.subheading")}
+          heading={t("contact.heading")}
+          nameLabel={t("contact.nameLabel")}
           namePlaceholder="Imran Hasan"
-          emailLabel="Email Address *"
+          emailLabel={t("contact.emailLabel")}
           emailPlaceholder="imranhsn.bd@gmail.com"
-          phoneLabel="Phone Number *"
+          phoneLabel={t("contact.phoneLabel")}
           phonePlaceholder="+880 1712 345678"
-          enquiryLabel="Enquiry Type *"
-          enquiryPlaceholder="Select an enquiry type"
-          enquiryOptions={[
-            { value: "general", label: "General Inquiry" },
-            { value: "support", label: "Technical Support" },
-            { value: "sales", label: "Sales & Pricing" },
-            { value: "partnership", label: "Partnership Opportunities" },
-          ]}
-          messageLabel="Message *"
-          messagePlaceholder="How can we help you today? Please provide as much detail as possible."
-          agreementText="I agree to the privacy policy and terms of service for this communication."
-          buttonText="Send Message"
+          enquiryLabel={t("contact.enquiryLabel")}
+          enquiryPlaceholder={t("contact.enquiryPlaceholder")}
+          enquiryOptions={t.raw("contact.enquiryOptions") as { value: string; label: string }[]}
+          messageLabel={t("contact.messageLabel")}
+          messagePlaceholder={t("contact.messagePlaceholder")}
+          agreementText={t("contact.agreementText")}
+          buttonText={t("contact.buttonText")}
         />
         <Footer20 />
       </div>

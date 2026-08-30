@@ -28,10 +28,10 @@ export default async function LegalGuidancePage({
       ?.corridorId ??
     LEGAL_CORRIDORS[0].corridorId;
 
-  const rows = await prisma.legalStepProgress.findMany({ where: { userId: user.id } });
-  const progressByCorridor: Record<string, string[]> = {};
+  const rows = await prisma.legalGuidanceChecklistProgress.findMany({ where: { userId: user.id } });
+  const checklistProgress: Record<string, Record<string, Record<string, true>>> = {};
   for (const row of rows) {
-    (progressByCorridor[row.corridorId] ??= []).push(row.stepId);
+    ((checklistProgress[row.countryId] ??= {})[row.phaseId] ??= {})[row.itemId] = true;
   }
 
   return (
@@ -41,7 +41,7 @@ export default async function LegalGuidancePage({
         countries={Object.values(COUNTRY_LEGAL)}
         corridors={LEGAL_CORRIDORS}
         initialCorridorId={initialCorridorId}
-        progressByCorridor={progressByCorridor}
+        checklistProgress={checklistProgress}
       />
     </div>
   );

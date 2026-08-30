@@ -1,5 +1,30 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export function FinalCta() {
-  return <section className="bg-zinc-950"><div className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24"><h2 className="mx-auto max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">Go Abroad for Work. Go Prepared.</h2><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><Link href="/register" className="inline-flex h-11 items-center justify-center rounded-md bg-white px-5 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950">Start Your Journey</Link><Link href="/login" className="inline-flex h-11 items-center justify-center rounded-md border border-zinc-700 px-5 text-sm font-semibold text-white transition hover:border-zinc-500 hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950">Already have an account? Sign in</Link></div></div></section>;
+  const t = useTranslations("Home");
+
+  return (
+    <section className="bg-zinc-950">
+      <div className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">
+        <h2 className="mx-auto max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          {t("finalCta.title")}
+        </h2>
+        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <Link
+            href="/register"
+            className="inline-flex h-11 items-center justify-center rounded-md bg-white px-5 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+          >
+            {t("finalCta.startJourney")}
+          </Link>
+          <Link
+            href="/login"
+            className="inline-flex h-11 items-center justify-center rounded-md border border-zinc-700 px-5 text-sm font-semibold text-white transition hover:border-zinc-500 hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+          >
+            {t("finalCta.signIn")}
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
 }

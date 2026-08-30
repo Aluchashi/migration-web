@@ -13,6 +13,7 @@ import {
   TIMELINES,
 } from "@/lib/profile-options";
 import { saveProfile, type ProfileActionState } from "@/app/actions/profile";
+import { Dropdown } from "@/components/Elements/dropdown";
 
 type WorkItem = {
   jobTitle: string;
@@ -58,10 +59,10 @@ const initialState: ProfileActionState = {};
 
 function inputClass(error?: boolean) {
   return [
-    "h-11 w-full rounded-lg border bg-white px-3 text-sm text-zinc-900 outline-none transition-colors placeholder:text-zinc-400",
+    "h-11 w-full rounded-xl border bg-white px-3 text-sm text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 dark:bg-zinc-950 dark:text-zinc-100 dark:border-zinc-700 dark:placeholder:text-zinc-500",
     error
       ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100"
-      : "border-zinc-300 hover:border-zinc-400 focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10",
+      : "border-zinc-300 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:hover:border-zinc-600 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/20",
   ].join(" ");
 }
 
@@ -76,25 +77,25 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-zinc-500">
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
         {label}
       </label>
       {children}
-      {hint ? <p className="mt-1 text-xs text-zinc-400">{hint}</p> : null}
+      {hint ? <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">{hint}</p> : null}
     </div>
   );
 }
 
 function SectionHeading({ number, title, subtitle }: { number: string; title: string; subtitle: string }) {
   return (
-    <div className="border-b border-zinc-100 pb-4">
+    <div className="border-b border-zinc-100 pb-4 dark:border-zinc-800">
       <div className="flex items-baseline gap-3">
-        <span className="font-serif text-base italic text-sky-700">{number}</span>
-        <h2 className="font-serif text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl">
+        <span className="text-base font-bold text-emerald-600 dark:text-emerald-400">{number}</span>
+        <h2 className="text-xl font-semibold tracking-tight text-zinc-950 sm:text-2xl dark:text-zinc-50">
           {title}
         </h2>
       </div>
-      <p className="mt-1 pl-8 text-sm text-zinc-500">{subtitle}</p>
+      <p className="mt-1 pl-8 text-sm text-zinc-500 dark:text-zinc-400">{subtitle}</p>
     </div>
   );
 }
@@ -132,18 +133,18 @@ function TagInput({
   }
 
   return (
-    <div className="flex min-h-11 flex-wrap items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-2 py-1.5 transition-colors focus-within:border-zinc-900 focus-within:ring-2 focus-within:ring-zinc-900/10 hover:border-zinc-400">
+    <div className="flex min-h-11 flex-wrap items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-2 py-1.5 transition-colors focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-100 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:focus-within:border-emerald-500 dark:focus-within:ring-emerald-500/20">
       {values.map((value, index) => (
         <span
           key={`${value}-${index}`}
-          className="inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 py-0.5 pl-2.5 pr-1 text-xs font-medium text-zinc-700"
+          className="inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 py-0.5 pl-2.5 pr-1 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
         >
           {value}
           <button
             type="button"
             aria-label={`Remove ${value}`}
             onClick={() => onChange(values.filter((_, i) => i !== index))}
-            className="flex h-5 w-5 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-200 hover:text-zinc-700"
+            className="flex h-5 w-5 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-200 hover:text-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3">
               <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
@@ -158,7 +159,7 @@ function TagInput({
         onKeyDown={handleKeyDown}
         onBlur={() => add(draft)}
         placeholder={values.length === 0 ? placeholder : ""}
-        className="h-7 min-w-32 flex-1 bg-transparent text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
+        className="h-7 min-w-32 flex-1 bg-transparent text-sm text-zinc-900 outline-none placeholder:text-zinc-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
       />
     </div>
   );
@@ -176,15 +177,15 @@ function EntryCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative rounded-xl border border-zinc-200 bg-zinc-50/60 p-4 sm:p-5">
+    <div className="relative rounded-2xl border border-zinc-200 bg-muted/50 p-4 sm:p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
       <div className="mb-4 flex items-center justify-between">
-        <p className="text-xs font-bold uppercase tracking-widest text-zinc-400">{title}</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">{title}</p>
         {canRemove ? (
           <button
             type="button"
             onClick={onRemove}
             aria-label={`Remove ${title}`}
-            className="flex h-7 w-7 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600"
+            className="flex h-7 w-7 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/50 dark:hover:text-red-400"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
               <path d="M4 7h16M10 11v6m4-6v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" strokeLinecap="round" strokeLinejoin="round" />
@@ -202,7 +203,7 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="w-full rounded-xl border border-dashed border-zinc-300 py-3 text-sm font-medium text-zinc-600 transition-colors hover:border-zinc-400 hover:bg-zinc-50 hover:text-zinc-900"
+      className="w-full rounded-2xl border border-dashed border-zinc-300 py-3 text-sm font-medium text-zinc-600 transition-colors hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-emerald-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
     >
       + {label}
     </button>
@@ -216,7 +217,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex h-11 items-center justify-center rounded-lg bg-zinc-900 px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-400"
+      className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-400"
     >
       {pending ? "Saving..." : "Save profile"}
     </button>
@@ -316,7 +317,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
       <input type="hidden" name="educationJson" value={JSON.stringify(educations)} />
       <input type="hidden" name="languagesJson" value={JSON.stringify(languages)} />
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8">
+      <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="01"
           title="Personal Information"
@@ -379,7 +380,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8">
+      <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="02"
           title="Work Experience"
@@ -404,18 +405,13 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                 />
               </Field>
               <Field label="Industry / sector">
-                <select
+                <Dropdown
+                  options={INDUSTRIES.map((industry) => ({ value: industry, label: industry }))}
                   value={work.industry}
-                  onChange={(event) => updateWork(index, { industry: event.target.value })}
-                  className={inputClass()}
-                >
-                  <option value="">Select industry</option>
-                  {INDUSTRIES.map((industry) => (
-                    <option key={industry} value={industry}>
-                      {industry}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={(v) => updateWork(index, { industry: v })}
+                  placeholder="Select industry"
+                  title="Industry / sector"
+                />
               </Field>
               <Field label="Employer / company" hint="Optional.">
                 <input
@@ -455,7 +451,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                   className={`${inputClass()} disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-400`}
                 />
               </Field>
-              <label className="flex items-center gap-2.5 text-sm text-zinc-700 sm:col-span-2">
+              <label className="flex items-center gap-2.5 text-sm text-zinc-700 sm:col-span-2 dark:text-zinc-200">
                 <input
                   type="checkbox"
                   checked={work.currentlyWorking}
@@ -465,7 +461,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                       endDate: event.target.checked ? "" : work.endDate,
                     })
                   }
-                  className="h-4 w-4 rounded border-zinc-300 accent-zinc-900"
+                  className="h-4 w-4 rounded border-zinc-300 accent-emerald-600 dark:border-zinc-600 dark:accent-emerald-500"
                 />
                 Currently working here
               </label>
@@ -479,7 +475,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                     onChange={(event) => updateWork(index, { description: event.target.value })}
                     maxLength={1000}
                     rows={3}
-                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 hover:border-zinc-400 focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10"
+                    className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/20"
                     placeholder="e.g. Mixing cement, assisting masons, carrying materials, following site safety rules."
                   />
                 </Field>
@@ -493,7 +489,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8">
+      <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="03"
           title="Education"
@@ -508,18 +504,13 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
               onRemove={() => setEducations((current) => current.filter((_, i) => i !== index))}
             >
               <Field label="Degree / certificate level">
-                <select
+                <Dropdown
+                  options={EDUCATION_LEVELS.map((level) => ({ value: level, label: level }))}
                   value={education.level}
-                  onChange={(event) => updateEducation(index, { level: event.target.value })}
-                  className={inputClass()}
-                >
-                  <option value="">Select level</option>
-                  {EDUCATION_LEVELS.map((level) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={(v) => updateEducation(index, { level: v })}
+                  placeholder="Select level"
+                  title="Degree / certificate level"
+                />
               </Field>
               <Field label="Field of study / trade" hint="Optional — e.g. Electrical, Business Studies.">
                 <input
@@ -571,7 +562,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8">
+      <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="04"
           title="Skills"
@@ -591,7 +582,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8">
+      <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="05"
           title="Languages"
@@ -617,18 +608,13 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                 />
               </Field>
               <Field label="Proficiency level">
-                <select
+                <Dropdown
+                  options={PROFICIENCY_LEVELS.map((level) => ({ value: level, label: level }))}
                   value={language.proficiency}
-                  onChange={(event) => updateLanguage(index, { proficiency: event.target.value })}
-                  className={inputClass()}
-                >
-                  <option value="">Select level</option>
-                  {PROFICIENCY_LEVELS.map((level) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={(v) => updateLanguage(index, { proficiency: v })}
+                  placeholder="Select level"
+                  title="Proficiency level"
+                />
               </Field>
             </EntryCard>
           ))}
@@ -644,7 +630,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8">
+      <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="06"
           title="Migration Preferences"
@@ -665,8 +651,8 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                       className={[
                         "rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors",
                         active
-                          ? "border-zinc-900 bg-zinc-900 text-white"
-                          : "border-zinc-300 bg-white text-zinc-600 hover:border-zinc-400 hover:text-zinc-900",
+                       ? "border-emerald-600 bg-emerald-600 text-white"
+                       : "border-zinc-300 bg-white text-zinc-600 hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:text-zinc-100",
                       ].join(" ")}
                     >
                       {region}
@@ -677,47 +663,49 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
             </Field>
           </div>
           <Field label="Budget range">
-            <select name="budget" defaultValue={initialValues.budget} className={inputClass()}>
-              <option value="">Not specified</option>
-              {initialValues.budget && !BUDGETS.includes(initialValues.budget) ? (
-                <option value={initialValues.budget}>{initialValues.budget}</option>
-              ) : null}
-              {BUDGETS.map((budget) => (
-                <option key={budget} value={budget}>
-                  {budget}
-                </option>
-              ))}
-            </select>
+            <Dropdown
+              name="budget"
+              defaultValue={initialValues.budget}
+              options={[
+                { value: "", label: "Not specified" },
+                ...(initialValues.budget && !BUDGETS.includes(initialValues.budget)
+                  ? [{ value: initialValues.budget, label: initialValues.budget }]
+                  : []),
+                ...BUDGETS.map((budget) => ({ value: budget, label: budget })),
+              ]}
+              placeholder="Not specified"
+              title="Budget range"
+            />
           </Field>
           <Field label="Timeline / urgency">
-            <select name="timeline" defaultValue={initialValues.timeline} className={inputClass()}>
-              <option value="">Not specified</option>
-              {initialValues.timeline && !TIMELINES.includes(initialValues.timeline) ? (
-                <option value={initialValues.timeline}>{initialValues.timeline}</option>
-              ) : null}
-              {TIMELINES.map((timeline) => (
-                <option key={timeline} value={timeline}>
-                  {timeline}
-                </option>
-              ))}
-            </select>
+            <Dropdown
+              name="timeline"
+              defaultValue={initialValues.timeline}
+              options={[
+                { value: "", label: "Not specified" },
+                ...(initialValues.timeline && !TIMELINES.includes(initialValues.timeline)
+                  ? [{ value: initialValues.timeline, label: initialValues.timeline }]
+                  : []),
+                ...TIMELINES.map((timeline) => ({ value: timeline, label: timeline })),
+              ]}
+              placeholder="Not specified"
+              title="Timeline / urgency"
+            />
           </Field>
           <Field label="Family status" hint="Optional.">
-            <select
+            <Dropdown
               name="familyStatus"
               defaultValue={initialValues.familyStatus}
-              className={inputClass()}
-            >
-              <option value="">Not specified</option>
-              {initialValues.familyStatus && !FAMILY_STATUSES.includes(initialValues.familyStatus) ? (
-                <option value={initialValues.familyStatus}>{initialValues.familyStatus}</option>
-              ) : null}
-              {FAMILY_STATUSES.map((status) => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
+              options={[
+                { value: "", label: "Not specified" },
+                ...(initialValues.familyStatus && !FAMILY_STATUSES.includes(initialValues.familyStatus)
+                  ? [{ value: initialValues.familyStatus, label: initialValues.familyStatus }]
+                  : []),
+                ...FAMILY_STATUSES.map((status) => ({ value: status, label: status })),
+              ]}
+              placeholder="Not specified"
+              title="Family status"
+            />
           </Field>
         </div>
       </section>

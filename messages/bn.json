@@ -1,0 +1,187 @@
+{
+  "Home": {
+    "hero": {
+      "badge": "আরও পরিষ্কার পথের দিকে",
+      "title": "কাজের জন্য বিদেশ যান। প্রস্তুত হয়ে যান।",
+      "subtitle": "আপনার ক্যারিয়ার পরিকল্পনা করুন, দক্ষতা বাড়ান এবং বুঝতে পারেন এমন মাইগ্রেশন গাইডেন্স নিয়ে এগিয়ে যান।",
+      "startJourney": "যাত্রা শুরু করুন",
+      "exploreHow": "কীভাবে কাজ করে দেখুন",
+      "preparationLabel": "আপনার প্রস্তুতি",
+      "migrationReadiness": "মাইগ্রেশন রেডিনেস",
+      "inProgress": "চলমান",
+      "prepareWithClarity": "পরিষ্কার ধারণা নিয়ে প্রস্তুত হন",
+      "clarityDesc": "ক্যারিয়ার, দক্ষতা, মাইগ্রেশনের ধাপ ও নিরাপত্তা যাচাই — সব এক যাত্রায়।",
+      "migrationPreparation": "মাইগ্রেশন প্রস্তুতি",
+      "migrationPreparationDesc": "সিদ্ধান্তের আগে কী প্রস্তুত করবেন তা জানুন।",
+      "scamCheck": "প্রতারণা যাচাই",
+      "scamCheckDesc": "বিশ্বাস করার আগে সতর্কতার লক্ষণগুলো যাচাই করুন।",
+      "metrics": [
+        { "label": "Career Match", "value": "প্রোফাইল-ভিত্তিক", "tone": "bg-emerald-500" },
+        { "label": "Skill Readiness", "value": "অগ্রাধিকারভিত্তিক", "tone": "bg-zinc-300" },
+        { "label": "Learning Progress", "value": "Available", "tone": "bg-emerald-500" }
+      ]
+    },
+    "problem": {
+      "title": "বিদেশে কাজের জন্য যাওয়ার সাথে কঠিন প্রশ্ন আসে।",
+      "questions": [
+        "আমার জন্য কোন চাকরিটি ঠিক?",
+        "আমি কি ওই চাকরির জন্য প্রস্তুত?",
+        "মাইগ্রেট করার আগে আমার কী জানা উচিত?",
+        "এই চাকরির অফারটি কি আসল?"
+      ],
+      "features": ["Career Matcher", "Skill Gap Analysis", "Legal Migration Guidance", "Scam Checker"]
+    },
+    "journey": {
+      "title": "আপনার প্রোফাইল থেকে আরও ভালো মাইগ্রেশন সিদ্ধান্তের দিকে।",
+      "steps": ["প্রোফাইল", "ক্যারিয়ার", "দক্ষতা", "শেখা", "মাইগ্রেশন", "নিরাপত্তা"]
+    },
+    "features": {
+      "title": "যাওয়ার আগে যা যা দরকার সব এখানে।",
+      "explore": "ফিচার দেখুন",
+      "items": [
+        {
+          "title": "Career Matcher",
+          "description": "আপনার দক্ষতা, অভিজ্ঞতা, শিক্ষা ও লক্ষ্যের সাথে যায় এমন ক্যারিয়ার পথ খুঁজে নিন।",
+          "status": "Available",
+          "href": "/dashboard/career-matcher"
+        },
+        {
+          "title": "Skill Gap Analysis",
+          "description": "আপনার কোন দক্ষতা আছে এবং কোনটি বাড়াতে হবে তা বুঝুন।",
+          "status": "Available",
+          "href": "/dashboard/skill-gap"
+        },
+        {
+          "title": "Personalized Learning Roadmap",
+          "description": "আপনার লক্ষ্য ক্যারিয়ার ও দক্ষতার ঘাটতি অনুযায়ী গোছানো শেখার পথ পান।",
+          "status": "Available",
+          "href": "/dashboard/learning-roadmap"
+        },
+        {
+          "title": "Legal Migration Guidance",
+          "description": "বিদেশ যাওয়ার আগে গুরুত্বপূর্ণ মাইগ্রেশন ধাপ, যোগ্যতা, ডকুমেন্ট ও বিবেচনাগুলো বুঝুন।",
+          "status": "Available",
+          "href": "/dashboard/legal-guidance"
+        },
+        {
+          "title": "Scam Checker",
+          "description": "সন্দেহজনক চাকরির অফার, রিক্রুটার, পেমেন্ট চাওয়া বা মাইগ্রেশন দাবিতে সম্ভাব্য সতর্কতার লক্ষণ চিহ্নিত করুন।",
+          "status": "Available",
+          "href": "/dashboard/scam-checker"
+        }
+      ]
+    },
+    "scam": {
+      "title": "কোনো Job Offer নিয়ে নিশ্চিত নন?",
+      "checkAnOffer": "অফার যাচাই করুন",
+      "note": "ঝুঁকির সূচক মাত্র — আইনি বা প্রতারণার সিদ্ধান্ত নয়।",
+      "checkBeforeTrust": "বিশ্বাস করার আগে যাচাই করুন",
+      "checks": [
+        "Job Offer",
+        "রিক্রুটারের তথ্য",
+        "বেতন / সুবিধা",
+        "ভিসা দাবি",
+        "পেমেন্ট অনুরোধ",
+        "AI বিশ্লেষণ",
+        "সম্ভাব্য সতর্কতার লক্ষণ"
+      ]
+    },
+    "platform": {
+      "title": "উত্তরের চেয়েও বেশি। একটি সংযুক্ত যাত্রা।",
+      "differentiators": ["প্রোফাইল-ভিত্তিক", "ব্যক্তিগতকৃত", "ব্যবহারিক", "সংযুক্ত", "নিরাপত্তাকেন্দ্রিক"],
+      "howTitle": "কীভাবে কাজ করে",
+      "steps": [
+        { "number": "01", "title": "আপনার প্রোফাইল তৈরি করুন" },
+        { "number": "02", "title": "ব্যক্তিগতকৃত ইনসাইট পান" },
+        { "number": "03", "title": "যাওয়ার আগে প্রস্তুত হন" }
+      ],
+      "trustTitle": "এমন গাইডেন্স যা বুঝতে ও যাচাই করতে পারেন।",
+      "trust": [
+        "AI গাইডেন্স অফিসিয়াল উৎস থেকে যাচাই করুন।",
+        "তথ্যমূলক গাইডেন্স, আইনি পরামর্শ নয়।",
+        "Scam Checker ঝুঁকির সূচক দেয়, প্রতারণার রায় নয়।",
+        "আপনার ডেটা দায়িত্বশীলভাবে হ্যান্ডেল করা উচিত।"
+      ]
+    },
+    "dashboard": {
+      "title": "আপনার মাইগ্রেশন প্রস্তুতি, এক জায়গায়।",
+      "readiness": "মাইগ্রেশন রেডিনেস",
+      "yourJourney": "আপনার যাত্রা",
+      "sidebar": [
+        "ওভারভিউ",
+        "প্রোফাইল",
+        "Career Matcher",
+        "Skill Gap",
+        "Migration Guidance",
+        "Learning Roadmap",
+        "Scam Check"
+      ],
+      "prepStatus": "প্রস্তুতির অবস্থা",
+      "prepStatusBegin": "শুরু করতে আপনার প্রোফাইল তৈরি করুন",
+      "items": [
+        {
+          "title": "Career Match",
+          "status": "Available",
+          "description": "আপনার প্রোফাইলের ভিত্তিতে দেশ ও চাকরির পরামর্শ।"
+        },
+        {
+          "title": "Skill Gap",
+          "status": "Available",
+          "description": "একটি লক্ষ্য ভূমিকা ও দেশের জন্য অগ্রাধিকার দক্ষতা।"
+        },
+        {
+          "title": "Learning Roadmap",
+          "status": "Available",
+          "description": "আপনার দক্ষতার ঘাটতি থেকে গোছানো অগ্রাধিকার।"
+        },
+        {
+          "title": "Migration Guidance",
+          "status": "Available",
+          "description": "প্রস্তুতির তথ্য ও বিবেচনা।"
+        },
+        {
+          "title": "Scam Check",
+          "status": "Available",
+          "description": "বিশ্বাস করার আগে যাচাই করার মতো সম্ভাব্য সতর্কতার লক্ষণ।"
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "কাজের জন্য বিদেশ যান। প্রস্তুত হয়ে যান।",
+      "startJourney": "যাত্রা শুরু করুন",
+      "signIn": "অ্যাকাউন্ট থাকলে Sign in করুন"
+    },
+    "contact": {
+      "subheading": "আমাদের সাথে যোগাযোগ করুন",
+      "heading": "চলুন একটি কথোপকথন শুরু করি",
+      "nameLabel": "পূর্ণ নাম *",
+      "namePlaceholder": "Imran Hasan",
+      "emailLabel": "ইমেইল ঠিকানা *",
+      "emailPlaceholder": "imranhsn.bd@gmail.com",
+      "phoneLabel": "ফোন নম্বর *",
+      "phonePlaceholder": "+880 1712 345678",
+      "enquiryLabel": "জিজ্ঞাস্য ধরন *",
+      "enquiryPlaceholder": "একটি জিজ্ঞাস্য ধরন বাছাই করুন",
+      "enquiryOptions": [
+        { "value": "general", "label": "সাধারণ জিজ্ঞাসা" },
+        { "value": "support", "label": "প্রযুক্তিগত সাহায্য" },
+        { "value": "sales", "label": "বিক্রয় ও মূল্য" },
+        { "value": "partnership", "label": "পার্টনারশিপ সুযোগ" }
+      ],
+      "messageLabel": "মেসেজ *",
+      "messagePlaceholder": "আজ আমরা আপনাকে কীভাবে সাহায্য করতে পারি? যথাসম্ভব বিস্তারিত দিন।",
+      "agreementText": "আমি এই যোগাযোগের জন্য প্রাইভেসি পলিসি ও সার্ভিসের শর্তাবলী মেনে নিচ্ছি।",
+      "buttonText": "মেসেজ পাঠান",
+      "sending": "পাঠানো হচ্ছে…"
+    },
+    "footer": {
+      "description": "আপনার ক্যারিয়ার পরিকল্পনা করুন, দক্ষতা গড়ে তুলুন এবং পরিষ্কার, বিশ্বস্ত মাইগ্রেশন গাইডেন্স নিয়ে বিদেশ যান।",
+      "goodHeading": "ভালো",
+      "boringHeading": "শুষ্ক",
+      "coolHeading": "দারুণ",
+      "good": ["হোম", "ম্যানিফেস্টো", "গবেষণা", "ক্যারিয়ার"],
+      "boring": ["শর্তাবলী", "নিয়ম মেনে চলুন", "প্রাইভেসি", "সাহায্য"],
+      "cool": ["LinkedIn", "Facebook", "Instagram"]
+    }
+  }
+}

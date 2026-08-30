@@ -3,6 +3,7 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { motion, type Variants } from "motion/react";
+import { useTranslations } from "next-intl";
 
 import { BrandLogo } from "@/components/Elements/brand-logo";
 
@@ -50,28 +51,29 @@ export interface Footer20Props {
 
 export default function Footer20({
   brandName = "Porizayi",
-  description = "Plan your career, build your skills, and move abroad with clear, trustworthy migration guidance.",
+  description,
   email = "hello@porizayi.com",
-  links = {
-    good: [
-      { label: "Home", href: "#" },
-      { label: "Manifesto", href: "#" },
-      { label: "Research", href: "#" },
-      { label: "Careers", href: "#" },
-    ],
-    boring: [
-      { label: "Terms", href: "#" },
-      { label: "Play by the Rules", href: "#" },
-      { label: "Privacy", href: "#" },
-      { label: "Help", href: "#" },
-    ],
-    cool: [
-      { label: "LinkedIn", href: "#" },
-      { label: "Facebook", href: "#" },
-      { label: "Instagram", href: "#" },
-    ],
-  },
+  links,
 }: Footer20Props) {
+  const t = useTranslations("Home");
+  const resolvedDescription =
+    description ?? t("footer.description");
+  const resolvedLinks =
+    links ?? {
+      good: (t.raw("footer.good") as string[]).map((label) => ({
+        label,
+        href: "#",
+      })),
+      boring: (t.raw("footer.boring") as string[]).map((label) => ({
+        label,
+        href: "#",
+      })),
+      cool: (t.raw("footer.cool") as string[]).map((label) => ({
+        label,
+        href: "#",
+      })),
+    };
+
   return (
     <motion.footer
       variants={staggerContainer}
@@ -99,7 +101,7 @@ export default function Footer20({
 
             {/* Description */}
             <p className="text-[15px] leading-relaxed text-neutral-600 dark:text-neutral-400 max-w-[320px]">
-              {description}
+              {resolvedDescription}
             </p>
 
             {/* Email */}
@@ -121,10 +123,10 @@ export default function Footer20({
             {/* The Good */}
             <motion.div variants={riseItem} className="flex flex-col gap-6">
               <h4 className="font-medium text-neutral-900 dark:text-neutral-100">
-                The Good
+                {t("footer.goodHeading")}
               </h4>
               <ul className="flex flex-col gap-3">
-                {links.good.map((link, idx) => (
+                {resolvedLinks.good.map((link, idx) => (
                   <li key={idx}>
                     <a
                       href={link.href}
@@ -140,10 +142,10 @@ export default function Footer20({
             {/* The Boring */}
             <motion.div variants={riseItem} className="flex flex-col gap-6">
               <h4 className="font-medium text-neutral-900 dark:text-neutral-100">
-                The Boring
+                {t("footer.boringHeading")}
               </h4>
               <ul className="flex flex-col gap-3">
-                {links.boring.map((link, idx) => (
+                {resolvedLinks.boring.map((link, idx) => (
                   <li key={idx}>
                     <a
                       href={link.href}
@@ -159,10 +161,10 @@ export default function Footer20({
             {/* The Cool */}
             <motion.div variants={riseItem} className="flex flex-col gap-6">
               <h4 className="font-medium text-neutral-900 dark:text-neutral-100">
-                The Cool
+                {t("footer.coolHeading")}
               </h4>
               <ul className="flex flex-col gap-3">
-                {links.cool.map((link, idx) => (
+                {resolvedLinks.cool.map((link, idx) => (
                   <li key={idx}>
                     <a
                       href={link.href}

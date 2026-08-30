@@ -6,6 +6,7 @@ import { getAuthenticatedUser } from "@/lib/auth-user";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = { title: "Learning Roadmap | Porizayi" };
+export const dynamic = "force-dynamic";
 
 type ProfileSummary = {
   currentJob: string | null;
@@ -64,9 +65,30 @@ export default async function LearningRoadmapPage() {
     location: profile?.district ?? "",
   };
 
+  const [progressRows, topicRows] = await Promise.all([
+    prisma.learningProgress.findMany({ where: { userId: user.id }, select: { jobId: true, status: true } }),
+    prisma.topicProgress.findMany({
+      where: { userId: user.id, completed: true },
+      select: { jobId: true, topicId: true },
+    }),
+  ]);
+
+  const initialStatuses: Record<string, "analysis" | "learning"> = {};
+  for (const row of progressRows) initialStatuses[row.jobId] = (row.status as "analysis" | "learning") ?? "analysis";
+
+  const initialTopics: Record<string, Record<string, true>> = {};
+  for (const row of topicRows) {
+    ((initialTopics[row.jobId] ??= {})[row.topicId] = true);
+  }
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-      <LearningMap hasProfile={hasProfile} profile={profileSummary} />
+      <LearningMap
+        hasProfile={hasProfile}
+        profile={profileSummary}
+        initialStatuses={initialStatuses}
+        initialTopics={initialTopics}
+      />
     </div>
   );
 }

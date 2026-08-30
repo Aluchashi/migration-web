@@ -154,3 +154,14 @@ html {
     transform: translateY(-400%);
   }
 }
+
+/* Bengali locale: swap the site fonts to Hind Siliguri automatically.
+   Unlayered so it beats the `@layer base/utilities` font-family utilities. */
+html[lang="bn"] {
+  font-family: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+}
+[lang="bn"] .font-serif,
+[lang="bn"] .font-sans,
+[lang="bn"] .font-heading {
+  font-family: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+}

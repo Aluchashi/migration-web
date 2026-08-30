@@ -38,13 +38,13 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-widest text-sky-700">
+        <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
           Your profile
         </p>
-        <h1 className="mt-2 font-serif text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
+        <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl dark:text-zinc-50">
           Tell us about yourself
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600">
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
           The more complete your background, the smarter your career matches, skill gap
           analysis, and roadmap will be.
         </p>

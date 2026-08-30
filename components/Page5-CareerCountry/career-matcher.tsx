@@ -16,6 +16,7 @@ import {
   type ScoreWeights,
 } from "@/lib/career-scoring";
 import { REGION_OPTIONS } from "@/lib/profile-options";
+import { Dropdown } from "@/components/Elements/dropdown";
 
 type CareerMatcherProps = {
   snapshot: ProfileSnapshot | null;
@@ -438,18 +439,20 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
               >
                 Sort by
               </label>
-              <select
-                id="sort-key"
+              <Dropdown
+                options={[
+                  { value: "score", label: "Match score" },
+                  { value: "salary", label: "Salary (high first)" },
+                  { value: "cost", label: "Cost (low first)" },
+                  { value: "timeline", label: "Fastest first" },
+                  { value: "demand", label: "Demand level" },
+                ]}
                 value={sortKey}
-                onChange={(event) => setSortKey(event.target.value as SortKey)}
-                className="mt-1 h-10 rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-              >
-                <option value="score">Match score</option>
-                <option value="salary">Salary (high first)</option>
-                <option value="cost">Cost (low first)</option>
-                <option value="timeline">Fastest first</option>
-                <option value="demand">Demand level</option>
-              </select>
+                onValueChange={(v) => setSortKey(v as SortKey)}
+                placeholder="Sort by"
+                title="Sort by"
+                className="mt-1"
+              />
             </div>
             <div>
               <label
@@ -458,19 +461,17 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
               >
                 Region
               </label>
-              <select
-                id="region-filter"
+              <Dropdown
+                options={[
+                  { value: "all", label: "All regions" },
+                  ...REGION_OPTIONS.map((region) => ({ value: region, label: region })),
+                ]}
                 value={regionFilter}
-                onChange={(event) => setRegionFilter(event.target.value)}
-                className="mt-1 h-10 rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-              >
-                <option value="all">All regions</option>
-                {REGION_OPTIONS.map((region) => (
-                  <option key={region} value={region}>
-                    {region}
-                  </option>
-                ))}
-              </select>
+                onValueChange={(v) => setRegionFilter(v)}
+                placeholder="All regions"
+                title="Region"
+                className="mt-1"
+              />
             </div>
             <div>
               <label
@@ -479,19 +480,17 @@ export function CareerMatcher({ snapshot, essentialGaps }: CareerMatcherProps) {
               >
                 Job category
               </label>
-              <select
-                id="category-filter"
+              <Dropdown
+                options={[
+                  { value: "all", label: "All categories" },
+                  ...categories.map((category) => ({ value: category, label: category })),
+                ]}
                 value={categoryFilter}
-                onChange={(event) => setCategoryFilter(event.target.value)}
-                className="mt-1 h-10 rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-              >
-                <option value="all">All categories</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
+                onValueChange={(v) => setCategoryFilter(v)}
+                placeholder="All categories"
+                title="Job category"
+                className="mt-1"
+              />
             </div>
             {compareIds.length > 0 ? (
               <button

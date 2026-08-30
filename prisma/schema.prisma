@@ -21,6 +21,9 @@ model User {
   careerMatches    CareerMatch[]
   skillGapReports  SkillGapReport[]
   legalStepProgress LegalStepProgress[]
+  legalGuidanceChecklistProgress LegalGuidanceChecklistProgress[]
+  learningProgress LearningProgress[]
+  topicProgress TopicProgress[]
 }
 
 model PendingRegistration {
@@ -133,4 +136,44 @@ model LegalStepProgress {
 
   @@unique([userId, corridorId, stepId])
   @@index([userId, corridorId])
+}
+
+model LegalGuidanceChecklistProgress {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  countryId  String
+  phaseId    String
+  itemId     String
+  completed  Boolean   @default(true)
+  completedAt DateTime @default(now())
+
+  @@unique([userId, countryId, phaseId, itemId])
+  @@index([userId, countryId])
+  @@index([userId, countryId, phaseId])
+}
+
+model LearningProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String
+  status    String   @default("analysis")
+  startedAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+}
+
+model TopicProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId       String
+  phaseId     String
+  topicId     String
+  completed   Boolean   @default(true)
+  completedAt DateTime? @default(now())
+
+  @@unique([userId, jobId, phaseId, topicId])
+  @@index([userId, jobId])
 }

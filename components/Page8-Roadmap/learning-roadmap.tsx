@@ -2,11 +2,16 @@
 
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon, Tick02Icon, UserIcon } from "@hugeicons/core-free-icons";
 
 import type { LearningMapPriority, LearningMapResult } from "@/lib/learning-map";
 import { LoadingLoader } from "@/components/Elements/loading-loader";
+import { ScrollTimeline, type TimelineEvent } from "@/components/Elements/scroll-timeline";
+import { AlertDialog } from "@/components/Elements/alert-dialog";
+import { Dropdown } from "@/components/Elements/dropdown";
+import { toJobId, type LearningPhaseStatus } from "@/lib/learning-progress";
 
 type ProfileSummary = {
   currentJob: string | null;
@@ -16,7 +21,12 @@ type ProfileSummary = {
   languages: string[];
   location: string;
 };
-type Props = { hasProfile: boolean; profile: ProfileSummary };
+type Props = {
+  hasProfile: boolean;
+  profile: ProfileSummary;
+  initialStatuses: Record<string, LearningPhaseStatus>;
+  initialTopics: Record<string, Record<string, true>>;
+};
 
 const ICON_TILE = "bg-muted dark:bg-muted/10 mb-0 size-fit rounded-xl p-px";
 const ICON_INNER =
@@ -104,13 +114,51 @@ function ProfileDetails({ profile }: { profile: ProfileSummary }) {
   );
 }
 
-export function LearningMap({ hasProfile, profile }: Props) {
+function ProgressRing({ completed, total }: { completed: number; total: number }) {
+  const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
+  const radius = 15.9;
+  const circumference = 2 * Math.PI * radius;
+  return (
+    <div className="relative flex h-20 w-20 items-center justify-center">
+      <svg viewBox="0 0 36 36" className="h-20 w-20 -rotate-90">
+        <circle cx="18" cy="18" r={radius} fill="none" stroke="#e5e7eb" strokeWidth="3" className="dark:stroke-zinc-700" />
+        <circle
+          cx="18"
+          cy="18"
+          r={radius}
+          fill="none"
+          stroke="#10b981"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference - (circumference * pct) / 100}
+        />
+      </svg>
+      <div className="absolute text-center">
+        <p className="text-base font-bold text-zinc-950 dark:text-zinc-50">{pct}%</p>
+        <p className="text-[9px] text-zinc-500 dark:text-zinc-400">
+          {completed}/{total}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export function LearningMap({ hasProfile, profile, initialStatuses, initialTopics }: Props) {
   const [country, setCountry] = useState("");
   const [job, setJob] = useState("");
   const [position, setPosition] = useState("");
   const [result, setResult] = useState<LearningMapResult | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [statuses, setStatuses] = useState<Record<string, LearningPhaseStatus>>(initialStatuses);
+  const [topics, setTopics] = useState<Record<string, Record<string, true>>>(initialTopics);
+  const [pendingTopicKeys, setPendingTopicKeys] = useState<Set<string>>(new Set());
+  const [pendingState, setPendingState] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [giveUpJobId, setGiveUpJobId] = useState<string | null>(null);
+  const router = useRouter();
 
   async function analyze(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -137,6 +185,83 @@ export function LearningMap({ hasProfile, profile }: Props) {
       setPending(false);
     }
   }
+
+  async function startLearning(jobId: string) {
+    setStatuses((prev) => ({ ...prev, [jobId]: "learning" }));
+    setPendingState(true);
+    try {
+      const res = await fetch("/api/learning-progress/state", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobId, status: "learning" }),
+      });
+      if (!res.ok) throw new Error("failed");
+      router.refresh();
+    } catch {
+      setStatuses((prev) => ({ ...prev, [jobId]: "analysis" }));
+    } finally {
+      setPendingState(false);
+    }
+  }
+
+  async function confirmGiveUp(jobId: string) {
+    setStatuses((prev) => ({ ...prev, [jobId]: "analysis" }));
+    setAlertOpen(false);
+    setPendingState(true);
+    try {
+      const res = await fetch("/api/learning-progress/state", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobId, status: "analysis" }),
+      });
+      if (!res.ok) throw new Error("failed");
+      router.refresh();
+    } catch {
+      setStatuses((prev) => ({ ...prev, [jobId]: "learning" }));
+    } finally {
+      setPendingState(false);
+    }
+  }
+
+  async function handleToggleTopic(jobId: string, phaseId: string, topicId: string, completed: boolean) {
+    const key = `${jobId}::${topicId}`;
+    setTopics((prev) => {
+      const job = { ...(prev[jobId] ?? {}) };
+      if (completed) job[topicId] = true;
+      else delete job[topicId];
+      return { ...prev, [jobId]: job };
+    });
+    setPendingTopicKeys((prev) => new Set(prev).add(key));
+    try {
+      const res = await fetch("/api/learning-progress/topic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobId, phaseId, topicId, completed }),
+      });
+      if (!res.ok) throw new Error("failed");
+    } catch {
+      setTopics((prev) => {
+        const job = { ...(prev[jobId] ?? {}) };
+        if (completed) delete job[topicId];
+        else job[topicId] = true;
+        return { ...prev, [jobId]: job };
+      });
+      } finally {
+        setPendingTopicKeys((prev) => {
+          const next = new Set(prev);
+          next.delete(key);
+          return next;
+        });
+      }
+    router.refresh();
+  }
+
+  const jobId = result ? toJobId(result.target.country, result.target.job, result.target.position) : null;
+  const status: LearningPhaseStatus = jobId
+    ? (statuses[jobId] ?? initialStatuses[jobId] ?? "analysis")
+    : "analysis";
+  const jobTopics = jobId ? (topics[jobId] ?? initialTopics[jobId] ?? {}) : {};
+  const inLearning = status === "learning";
 
   return (
     <>
@@ -187,20 +312,17 @@ export function LearningMap({ hasProfile, profile }: Props) {
                   >
                     {String(label)}
                   </label>
-                  <select
-                    id={`target-${index}`}
+                  <Dropdown
+                    options={[
+                      { value: "", label: `Select ${String(label).toLowerCase()}` },
+                      ...(options as string[]).map((option) => ({ value: option, label: option })),
+                    ]}
                     value={String(value)}
                     disabled={index === 2 && !job}
-                    onChange={(event) => (setter as (value: string) => void)(event.target.value)}
-                    className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-                  >
-                    <option value="">Select {String(label).toLowerCase()}</option>
-                    {(options as string[]).map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
+                    onValueChange={(v) => (setter as (value: string) => void)(v)}
+                    placeholder={`Select ${String(label).toLowerCase()}`}
+                    title={String(label)}
+                  />
                 </div>
               ))}
             </div>
@@ -245,12 +367,43 @@ export function LearningMap({ hasProfile, profile }: Props) {
         </div>
       ) : null}
 
-      {result ? <Results result={result} /> : null}
+      {result && jobId ? (
+        inLearning ? (
+          <LearningPhase
+            result={result}
+            topics={jobTopics}
+            pendingKeys={pendingTopicKeys}
+            onToggleItem={(phaseId, topicId, completed) => handleToggleTopic(jobId, phaseId, topicId, completed)}
+            onGiveUp={() => {
+              setGiveUpJobId(jobId);
+              setAlertOpen(true);
+            }}
+          />
+        ) : (
+          <Results result={result} onStartLearning={() => startLearning(jobId)} pending={pendingState} />
+        )
+      ) : null}
+
+      <AlertDialog
+        open={alertOpen}
+        onOpenChange={setAlertOpen}
+        title="Leave this learning path?"
+        description={
+          <>
+            Are you sure you want to step away from this learning path? Your checked progress will be kept, but
+            you&apos;ll return to the Analysis view. You can start learning again anytime.
+          </>
+        }
+        confirmLabel={pendingState ? "Leaving..." : "Give Up"}
+        cancelLabel="Keep Learning"
+        pending={pendingState}
+        onConfirm={() => giveUpJobId && confirmGiveUp(giveUpJobId)}
+      />
     </>
   );
 }
 
-function Results({ result }: { result: LearningMapResult }) {
+function Results({ result, onStartLearning, pending }: { result: LearningMapResult; onStartLearning: () => void; pending: boolean }) {
   return (
     <div className="space-y-8 py-9">
       <section className="flex flex-col gap-4 rounded-3xl bg-muted/50 p-6 sm:flex-row sm:items-center sm:justify-between">
@@ -379,6 +532,78 @@ function Results({ result }: { result: LearningMapResult }) {
           ))}
         </div>
       </section>
+
+      <div className="flex justify-center pt-2">
+        <button
+          type="button"
+          disabled={pending}
+          onClick={onStartLearning}
+          className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <HugeiconsIcon icon={ArrowRight01Icon} className="h-5 w-5" />
+          Start Learning
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function LearningPhase({
+  result,
+  topics,
+  pendingKeys,
+  onToggleItem,
+  onGiveUp,
+}: {
+  result: LearningMapResult;
+  topics: Record<string, true>;
+  pendingKeys: Set<string>;
+  onToggleItem: (phaseId: string, topicId: string, completed: boolean) => void;
+  onGiveUp: () => void;
+}) {
+  const completedCount = result.roadmap.filter((step) => topics[`topic-${step.step}`]).length;
+  const total = result.roadmap.length;
+
+  const events: TimelineEvent[] = result.roadmap.map((step) => {
+    const phaseId = `phase-${step.step}`;
+    const topicId = `topic-${step.step}`;
+    return {
+      id: phaseId,
+      year: `Phase ${step.step}`,
+      title: step.title,
+      subtitle: step.estimatedEffort ? `Estimated effort: ${step.estimatedEffort}` : undefined,
+      description: step.description,
+      checklistItems: [{ id: topicId, label: step.title, completed: Boolean(topics[topicId]) }],
+    };
+  });
+
+  return (
+    <div className="space-y-8 py-9">
+      <section className="flex flex-col gap-5 rounded-3xl bg-muted/50 p-6 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
+            {result.target.country} · {result.target.job} · {result.target.position}
+          </p>
+          <h2 className="mt-1 text-xl font-semibold text-zinc-950 dark:text-zinc-50">Your Learning Path</h2>
+          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+            Tick off each step as you complete it. Your progress is saved automatically.
+          </p>
+        </div>
+        <div className="flex items-center gap-5">
+          <ProgressRing completed={completedCount} total={total} />
+          <button
+            type="button"
+            onClick={onGiveUp}
+            className="inline-flex h-10 items-center justify-center rounded-xl border border-red-300 bg-white px-4 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-900/60 dark:bg-zinc-950 dark:text-red-400 dark:hover:bg-red-950/40"
+          >
+            Give Up
+          </button>
+        </div>
+      </section>
+
+      <div className="mt-4">
+        <ScrollTimeline events={events} onToggleItem={onToggleItem} pendingKeys={pendingKeys} />
+      </div>
     </div>
   );
 }

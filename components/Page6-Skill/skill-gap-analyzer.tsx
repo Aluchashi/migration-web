@@ -7,6 +7,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { GlobalSearchIcon } from "@hugeicons/core-free-icons";
 
 import type { SkillGapResult, SkillPriority } from "@/lib/skill-gap";
+import { Dropdown } from "@/components/Elements/dropdown";
 
 const ICON_TILE = "bg-muted dark:bg-muted/10 mb-0 size-fit rounded-xl p-px";
 const ICON_INNER =
@@ -339,20 +340,16 @@ export function SkillGapAnalyzer({
                 <label htmlFor="designation" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
                   Designation <span className="text-zinc-400">(optional)</span>
                 </label>
-                <select
-                  id="designation"
-                  name="designation"
+                <Dropdown
+                  options={[
+                    { value: "", label: "Select level" },
+                    ...designationOptions.map((option) => ({ value: option, label: option })),
+                  ]}
                   value={designation}
-                  onChange={(event) => setDesignation(event.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-                >
-                  <option value="">Select level</option>
-                  {designationOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={(v) => setDesignation(v)}
+                  placeholder="Select level"
+                  title="Designation"
+                />
               </div>
 
               <div className="sm:col-span-2">

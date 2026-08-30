@@ -1,0 +1,187 @@
+{
+  "Home": {
+    "hero": {
+      "badge": "A clearer path forward",
+      "title": "Go Abroad for Work. Go Prepared.",
+      "subtitle": "Plan your career, sharpen your skills, and move forward with migration guidance you can understand.",
+      "startJourney": "Start Your Journey",
+      "exploreHow": "Explore How It Works",
+      "preparationLabel": "Your preparation",
+      "migrationReadiness": "Migration readiness",
+      "inProgress": "In progress",
+      "prepareWithClarity": "Prepare with clarity",
+      "clarityDesc": "Career, skills, migration steps, and safety checks in one journey.",
+      "migrationPreparation": "Migration preparation",
+      "migrationPreparationDesc": "Know what to prepare before decisions.",
+      "scamCheck": "Scam check",
+      "scamCheckDesc": "Review warning signs before you trust.",
+      "metrics": [
+        { "label": "Career Match", "value": "Profile-based", "tone": "bg-emerald-500" },
+        { "label": "Skill Readiness", "value": "Prioritized", "tone": "bg-zinc-300" },
+        { "label": "Learning Progress", "value": "Available", "tone": "bg-emerald-500" }
+      ]
+    },
+    "problem": {
+      "title": "Going Abroad for Work Comes With Difficult Questions.",
+      "questions": [
+        "Which job is right for me?",
+        "Am I ready for that job?",
+        "What should I know before I migrate?",
+        "Is this job offer genuine?"
+      ],
+      "features": ["Career Matcher", "Skill Gap Analysis", "Legal Migration Guidance", "Scam Checker"]
+    },
+    "journey": {
+      "title": "From Your Profile to a Better Migration Decision.",
+      "steps": ["Profile", "Career", "Skills", "Learning", "Migration", "Safety"]
+    },
+    "features": {
+      "title": "Everything You Need Before You Go.",
+      "explore": "Explore feature",
+      "items": [
+        {
+          "title": "Career Matcher",
+          "description": "Find career paths that fit your skills, experience, education, and goals.",
+          "status": "Available",
+          "href": "/dashboard/career-matcher"
+        },
+        {
+          "title": "Skill Gap Analysis",
+          "description": "Understand which skills you already have and which skills you need to develop.",
+          "status": "Available",
+          "href": "/dashboard/skill-gap"
+        },
+        {
+          "title": "Personalized Learning Roadmap",
+          "description": "Get a structured learning path based on your target career and skill gaps.",
+          "status": "Available",
+          "href": "/dashboard/learning-roadmap"
+        },
+        {
+          "title": "Legal Migration Guidance",
+          "description": "Understand important migration steps, requirements, documents, and considerations before going abroad.",
+          "status": "Available",
+          "href": "/dashboard/legal-guidance"
+        },
+        {
+          "title": "Scam Checker",
+          "description": "Identify potential warning signs in suspicious job offers, recruiters, payment requests, or migration claims.",
+          "status": "Available",
+          "href": "/dashboard/scam-checker"
+        }
+      ]
+    },
+    "scam": {
+      "title": "Not Sure About a Job Offer?",
+      "checkAnOffer": "Check an Offer",
+      "note": "Risk indicators only — not a legal or fraud determination.",
+      "checkBeforeTrust": "Check before you trust",
+      "checks": [
+        "Job Offer",
+        "Recruiter Information",
+        "Salary / Benefits",
+        "Visa Claims",
+        "Payment Requests",
+        "AI Analysis",
+        "Potential Warning Signs"
+      ]
+    },
+    "platform": {
+      "title": "More Than Answers. A Connected Journey.",
+      "differentiators": ["Profile-based", "Personalized", "Practical", "Connected", "Safety-focused"],
+      "howTitle": "How It Works",
+      "steps": [
+        { "number": "01", "title": "Build Your Profile" },
+        { "number": "02", "title": "Get Personalized Insights" },
+        { "number": "03", "title": "Prepare Before You Go" }
+      ],
+      "trustTitle": "Guidance You Can Understand and Verify.",
+      "trust": [
+        "Verify AI guidance with official sources.",
+        "Informational guidance, not legal advice.",
+        "Scam Checker provides risk indicators, not a fraud verdict.",
+        "Your data should be handled responsibly."
+      ]
+    },
+    "dashboard": {
+      "title": "Your Migration Preparation, In One Place.",
+      "readiness": "Migration Readiness",
+      "yourJourney": "Your journey",
+      "sidebar": [
+        "Overview",
+        "Profile",
+        "Career Matcher",
+        "Skill Gap",
+        "Migration Guidance",
+        "Learning Roadmap",
+        "Scam Check"
+      ],
+      "prepStatus": "Preparation status",
+      "prepStatusBegin": "Build your profile to begin",
+      "items": [
+        {
+          "title": "Career Match",
+          "status": "Available",
+          "description": "Country and job suggestions based on your profile."
+        },
+        {
+          "title": "Skill Gap",
+          "status": "Available",
+          "description": "Prioritized skills for a target role and country."
+        },
+        {
+          "title": "Learning Roadmap",
+          "status": "Available",
+          "description": "Structured priorities from your skill gaps."
+        },
+        {
+          "title": "Migration Guidance",
+          "status": "Available",
+          "description": "Preparation information and considerations."
+        },
+        {
+          "title": "Scam Check",
+          "status": "Available",
+          "description": "Potential warning signs to review before you trust."
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Go Abroad for Work. Go Prepared.",
+      "startJourney": "Start Your Journey",
+      "signIn": "Already have an account? Sign in"
+    },
+    "contact": {
+      "subheading": "CONNECT WITH US",
+      "heading": "Let's Start a Conversation",
+      "nameLabel": "Full Name *",
+      "namePlaceholder": "Imran Hasan",
+      "emailLabel": "Email Address *",
+      "emailPlaceholder": "imranhsn.bd@gmail.com",
+      "phoneLabel": "Phone Number *",
+      "phonePlaceholder": "+880 1712 345678",
+      "enquiryLabel": "Enquiry Type *",
+      "enquiryPlaceholder": "Select an enquiry type",
+      "enquiryOptions": [
+        { "value": "general", "label": "General Inquiry" },
+        { "value": "support", "label": "Technical Support" },
+        { "value": "sales", "label": "Sales & Pricing" },
+        { "value": "partnership", "label": "Partnership Opportunities" }
+      ],
+      "messageLabel": "Message *",
+      "messagePlaceholder": "How can we help you today? Please provide as much detail as possible.",
+      "agreementText": "I agree to the privacy policy and terms of service for this communication.",
+      "buttonText": "Send Message",
+      "sending": "Sending…"
+    },
+    "footer": {
+      "description": "Plan your career, build your skills, and move abroad with clear, trustworthy migration guidance.",
+      "goodHeading": "The Good",
+      "boringHeading": "The Boring",
+      "coolHeading": "The Cool",
+      "good": ["Home", "Manifesto", "Research", "Careers"],
+      "boring": ["Terms", "Play by the Rules", "Privacy", "Help"],
+      "cool": ["LinkedIn", "Facebook", "Instagram"]
+    }
+  }
+}
