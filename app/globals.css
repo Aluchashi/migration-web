@@ -156,12 +156,43 @@ html {
 }
 
 /* Bengali locale: swap the site fonts to Hind Siliguri automatically.
-   Unlayered so it beats the `@layer base/utilities` font-family utilities. */
+   Unlayered so it beats the `@layer base/utilities` font-family utilities.
+   Weights follow role: headings use the Semibold (600) cut, subheadings/
+   labels use Medium (500) and body text uses Regular (400) via weight
+   utilities; only 400/500/600/700 are self-hosted. */
 html[lang="bn"] {
+  font-family: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+}
+[lang="bn"] body {
+  font-family: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+}
+[lang="bn"] body * {
   font-family: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
 }
 [lang="bn"] .font-serif,
 [lang="bn"] .font-sans,
 [lang="bn"] .font-heading {
   font-family: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+}
+[lang="bn"] .uv-loader {
+  font-family: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+}
+[lang="bn"] h1,
+[lang="bn"] h2 {
+  font-weight: 600;
+}
+[lang="bn"] h3 {
+  font-weight: 600;
+}
+[lang="bn"] .font-bold {
+  font-weight: 700;
+}
+[lang="bn"] .font-semibold {
+  font-weight: 600;
+}
+[lang="bn"] .font-medium {
+  font-weight: 500;
+}
+[lang="bn"] .font-normal {
+  font-weight: 400;
 }
