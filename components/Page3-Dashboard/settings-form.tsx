@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,14 +89,16 @@ function Row({
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+  const t = useTranslations("Dashboard.settings");
   return (
     <Button type="submit" disabled={pending}>
-      {pending ? "Saving…" : "Save changes"}
+      {pending ? t("saving") : t("save")}
     </Button>
   );
 }
 
 export function SettingsForm({ user }: { user: SettingsUser }) {
+  const t = useTranslations("Dashboard.settings");
   const [state, formAction] = useFormState(updateAccount, {});
   const [notif, setNotif] = React.useState({ email: true, sms: false, product: true });
   const [twoFactor, setTwoFactor] = React.useState(false);
@@ -128,18 +131,15 @@ export function SettingsForm({ user }: { user: SettingsUser }) {
 
   return (
     <div className="mt-8 space-y-6">
-      <Card
-        title="Account"
-        description="Update your personal details. Your email is used for sign-in."
-      >
+      <Card title={t("account")} description={t("accountDesc")}>
         <form action={formAction} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="name">Full name</Label>
+              <Label htmlFor="name">{t("fullName")}</Label>
               <Input id="name" name="name" defaultValue={user.name ?? ""} required />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="phone">Phone</Label>
+              <Label htmlFor="phone">{t("phone")}</Label>
               <Input
                 id="phone"
                 name="phone"
@@ -151,7 +151,7 @@ export function SettingsForm({ user }: { user: SettingsUser }) {
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("email")}</Label>
             <Input
               id="email"
               name="email"
@@ -176,57 +176,54 @@ export function SettingsForm({ user }: { user: SettingsUser }) {
         </form>
       </Card>
 
-      <Card
-        title="Notifications"
-        description="Control which updates we send you. Saved on this device."
-      >
+      <Card title={t("notifications")} description={t("notificationsDesc")}>
         <div className="divide-y divide-zinc-100">
           <Row
-            title="Email notifications"
-            description="Account activity and migration reminders by email."
+            title={t("emailNotif")}
+            description={t("emailNotifDesc")}
           >
             <Toggle
               checked={notif.email}
               onChange={(value) => setNotifKey("email", value)}
-              label="Email notifications"
+              label={t("emailNotif")}
             />
           </Row>
           <Row
-            title="SMS alerts"
-            description="Important security and verification messages by SMS."
+            title={t("smsAlerts")}
+            description={t("smsAlertsDesc")}
           >
             <Toggle
               checked={notif.sms}
               onChange={(value) => setNotifKey("sms", value)}
-              label="SMS alerts"
+              label={t("smsAlerts")}
             />
           </Row>
           <Row
-            title="Product updates"
-            description="New features and tips from Porizayi."
+            title={t("productUpdates")}
+            description={t("productUpdatesDesc")}
           >
             <Toggle
               checked={notif.product}
               onChange={(value) => setNotifKey("product", value)}
-              label="Product updates"
+              label={t("productUpdates")}
             />
           </Row>
         </div>
       </Card>
 
       <Card
-        title="Security"
-        description="Protect your account with an extra verification step."
+        title={t("security")}
+        description={t("securityDesc")}
       >
         <div className="divide-y divide-zinc-100">
           <Row
-            title="Two-factor authentication"
-            description="Require a code in addition to your password at sign-in."
+            title={t("twoFactor")}
+            description={t("twoFactorDesc")}
           >
             <Toggle
               checked={twoFactor}
               onChange={toggleTwoFactor}
-              label="Two-factor authentication"
+              label={t("twoFactor")}
             />
           </Row>
         </div>

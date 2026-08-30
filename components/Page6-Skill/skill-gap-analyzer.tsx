@@ -6,6 +6,8 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GlobalSearchIcon } from "@hugeicons/core-free-icons";
 
+import { useTranslations } from "next-intl";
+
 import type { SkillGapResult, SkillPriority } from "@/lib/skill-gap";
 import { Dropdown } from "@/components/Elements/dropdown";
 
@@ -89,6 +91,14 @@ export function SkillGapAnalyzer({
   matchSuggestions,
 }: SkillGapAnalyzerProps) {
   const router = useRouter();
+  const t = useTranslations("Dashboard.skillGap");
+
+  const priorityLabel: Record<SkillPriority, string> = {
+    high: "highFocus",
+    medium: "mediumFocus",
+    low: "lightFocus",
+  };
+
   const [targetJob, setTargetJob] = useState(initialReport?.targetJob ?? initialJob ?? "");
   const [targetCountry, setTargetCountry] = useState(initialReport?.targetCountry ?? initialCountry ?? "");
   const [companyName, setCompanyName] = useState("");
@@ -112,7 +122,7 @@ export function SkillGapAnalyzer({
     const country = (explicitCountry ?? targetCountry).trim();
 
     if (!job || !country) {
-      setError("Enter both a target job and company country.");
+      setError(t("needBoth"));
       return;
     }
 
@@ -134,14 +144,14 @@ export function SkillGapAnalyzer({
       const data = (await response.json()) as { report?: SkillGapReportView; error?: string };
 
       if (!response.ok || !data.report) {
-        throw new Error(data.error || "Could not analyze skill gaps.");
+        throw new Error(data.error || t("analyzeError"));
       }
 
       setReport(data.report);
       setReportOpen(true);
       router.refresh();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "Could not analyze skill gaps.");
+      setError(requestError instanceof Error ? requestError.message : t("analyzeError"));
     } finally {
       setPending(false);
     }
@@ -174,31 +184,29 @@ export function SkillGapAnalyzer({
   return (
     <>
       <div className="border-b border-zinc-200 pb-7 dark:border-zinc-800">
-        <p className="text-sm font-medium text-emerald-700">AI skills planning</p>
+        <p className="text-sm font-medium text-emerald-700">{t("eyebrow")}</p>
         <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl dark:text-zinc-50">
-          Skill Gap Analyzer
+          {t("pageTitle")}
         </h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-          Compare your saved experience with the practical skills needed for a target role and country.
+          {t("pageIntro")}
         </p>
       </div>
 
       {!hasProfile ? (
         <div className="mt-6 rounded-2xl border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:bg-amber-950/40">
-          Add your skills, education, or experience to your{" "}
+          {t("needProfileBefore")}{" "}
           <Link href="/dashboard/profile" className="font-semibold underline underline-offset-2">
-            profile
+            {t("needProfileLink")}
           </Link>{" "}
-          before running an analysis.
+          {t("needProfileAfter")}
         </div>
       ) : null}
 
       {matchSuggestions && matchSuggestions.length > 0 ? (
         <div className="mt-6">
-          <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">From your Career Matcher</p>
-          <p className="mt-1 text-xs text-zinc-500">
-            Pick a role your matcher suggested - it loads the job and country and runs the analysis.
-          </p>
+          <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">{t("careerMatcherIntro")}</p>
+          <p className="mt-1 text-xs text-zinc-500">{t("matcherHint")}</p>
           <div className="mt-3 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {matchSuggestions.map((item) => (
               <div
@@ -222,7 +230,7 @@ export function SkillGapAnalyzer({
                         <span
                           className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold capitalize ring-1 ring-inset ${demandBadge[item.demandLevel]}`}
                         >
-                          {item.demandLevel} demand
+                          {t("demand", { level: item.demandLevel })}
                         </span>
                       </div>
                       <p className="mt-0.5 text-xs text-zinc-500">{item.country}</p>
@@ -233,11 +241,11 @@ export function SkillGapAnalyzer({
                   </p>
                   <dl className="space-y-1.5 text-xs">
                     <div className="flex justify-between gap-2">
-                      <dt className="text-zinc-500">Salary</dt>
+                      <dt className="text-zinc-500">{t("salary")}</dt>
                       <dd className="text-right font-medium text-zinc-700 dark:text-zinc-200">{item.monthlySalaryLabel}</dd>
                     </div>
                     <div className="flex justify-between gap-2">
-                      <dt className="text-zinc-500">Timeline</dt>
+                      <dt className="text-zinc-500">{t("timeline")}</dt>
                       <dd className="text-right font-medium text-zinc-700 dark:text-zinc-200">{item.timelineLabel}</dd>
                     </div>
                   </dl>
@@ -258,7 +266,7 @@ export function SkillGapAnalyzer({
                     rel="noreferrer"
                     className="text-[11px] font-medium text-emerald-700 hover:underline"
                   >
-                    Source ↗
+                    {t("source")}
                   </a>
                 </div>
               </div>
@@ -274,7 +282,7 @@ export function SkillGapAnalyzer({
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="targetJob" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-              Job name <span className="text-zinc-400">(what job)</span>
+              {t("jobName")}
             </label>
             <input
               id="targetJob"
@@ -286,13 +294,13 @@ export function SkillGapAnalyzer({
               value={targetJob}
               onChange={(event) => setTargetJob(event.target.value)}
               className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-              placeholder="e.g. Maintenance electrician"
+              placeholder={t("jobPlaceholder")}
             />
           </div>
 
           <div>
             <label htmlFor="targetCountry" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-              Company country
+              {t("companyCountry")}
             </label>
             <input
               id="targetCountry"
@@ -304,7 +312,7 @@ export function SkillGapAnalyzer({
               value={targetCountry}
               onChange={(event) => setTargetCountry(event.target.value)}
               className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-              placeholder="e.g. Saudi Arabia"
+              placeholder={t("countryPlaceholder")}
             />
           </div>
         </div>
@@ -316,13 +324,13 @@ export function SkillGapAnalyzer({
             className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:underline"
             aria-expanded={showExternal}
           >
-            {showExternal ? "− Hide external job details" : "+ Add external job details"}
+            {showExternal ? t("hideExternal") : t("addExternal")}
           </button>
           {showExternal ? (
             <div className="mt-4 grid gap-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-zinc-900/60 sm:grid-cols-2">
               <div>
                 <label htmlFor="companyName" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-                  Company name <span className="text-zinc-400">(optional)</span>
+                  {t("companyName")}
                 </label>
                 <input
                   id="companyName"
@@ -332,29 +340,29 @@ export function SkillGapAnalyzer({
                   value={companyName}
                   onChange={(event) => setCompanyName(event.target.value)}
                   className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-                  placeholder="e.g. ABC Wires Co."
+                  placeholder={t("companyPlaceholder")}
                 />
               </div>
 
               <div>
                 <label htmlFor="designation" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-                  Designation <span className="text-zinc-400">(optional)</span>
+                  {t("designation")} <span className="text-zinc-400">{t("optional")}</span>
                 </label>
                 <Dropdown
                   options={[
-                    { value: "", label: "Select level" },
+                    { value: "", label: t("selectLevel") },
                     ...designationOptions.map((option) => ({ value: option, label: option })),
                   ]}
                   value={designation}
                   onValueChange={(v) => setDesignation(v)}
-                  placeholder="Select level"
-                  title="Designation"
+                  placeholder={t("selectLevel")}
+                  title={t("designation")}
                 />
               </div>
 
               <div className="sm:col-span-2">
                 <label htmlFor="expectedSalary" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-                  Expected salary <span className="text-zinc-400">(optional)</span>
+                  {t("expectedSalary")}
                 </label>
                 <input
                   id="expectedSalary"
@@ -364,7 +372,7 @@ export function SkillGapAnalyzer({
                   value={expectedSalary}
                   onChange={(event) => setExpectedSalary(event.target.value)}
                   className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-                  placeholder="e.g. SAR 1,500/month"
+                  placeholder={t("salaryPlaceholder")}
                 />
               </div>
             </div>
@@ -372,10 +380,7 @@ export function SkillGapAnalyzer({
         </div>
 
         {jobSuggestions.length > 0 || countrySuggestions.length > 0 ? (
-          <p className="mt-4 text-xs text-zinc-500">
-            Previous matcher suggestions are available in the input dropdowns. Type any other job freely
-            for roles outside the dataset.
-          </p>
+          <p className="mt-4 text-xs text-zinc-500">{t("matcherAvailable")}</p>
         ) : null}
 
         {error ? (
@@ -393,7 +398,7 @@ export function SkillGapAnalyzer({
             disabled={!hasProfile || pending}
             className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-semibold text-white transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-400"
           >
-            {pending ? "Analyzing..." : report ? "Run new analysis" : "Analyze skill gaps"}
+            {pending ? t("analyzing") : report ? t("runNew") : t("analyze")}
           </button>
         </div>
       </form>
@@ -408,9 +413,9 @@ export function SkillGapAnalyzer({
               aria-expanded={reportOpen}
             >
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Latest analysis</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{t("latestAnalysis")}</p>
                 <h2 className="mt-2 text-xl font-semibold text-zinc-950 dark:text-zinc-50">
-                  {report.targetJob} in {report.targetCountry}
+                  {t("jobInCountry", { job: report.targetJob, country: report.targetCountry })}
                 </h2>
                 <p className="mt-2 text-xs text-zinc-500">
                   {new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(
@@ -424,7 +429,7 @@ export function SkillGapAnalyzer({
                     key={entry.priority}
                     className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${priorityMeta[entry.priority].chipClass}`}
                   >
-                    {entry.count} {entry.priority}
+                    {entry.count} {t(priorityLabel[entry.priority])}
                   </span>
                 ))}
                 <span className="text-zinc-400">
@@ -444,15 +449,15 @@ export function SkillGapAnalyzer({
             {reportOpen ? (
               <div className="mt-7">
                 <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl bg-muted/50 px-4 py-3 text-xs text-zinc-600 dark:bg-zinc-900/60 dark:text-zinc-300">
-                  <span className="font-semibold text-zinc-700 dark:text-zinc-200">How to read this:</span>
+                  <span className="font-semibold text-zinc-700 dark:text-zinc-200">{t("howToRead")}</span>
                   <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-red-500" /> High focus = learn first
+                    <span className="h-2.5 w-2.5 rounded-full bg-red-500" /> {t("highFocusFirst")}
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-orange-500" /> Medium focus
+                    <span className="h-2.5 w-2.5 rounded-full bg-orange-500" /> {t("mediumFocusHint")}
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> Light focus
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> {t("lightFocusHint")}
                   </span>
                 </div>
 
@@ -470,7 +475,7 @@ export function SkillGapAnalyzer({
                               id={`${priority}-priority-heading`}
                               className="text-lg font-semibold text-zinc-950 dark:text-zinc-50"
                             >
-                              {meta.label}
+                              {t(priorityLabel[priority])}
                             </h3>
                             <span
                               className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${meta.chipClass}`}
@@ -489,12 +494,12 @@ export function SkillGapAnalyzer({
                                   <span
                                     className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ring-inset ${meta.chipClass}`}
                                   >
-                                    {item.priority}
+                                    {t(priorityLabel[item.priority])}
                                   </span>
                                 </div>
                                 <div className="mt-3">
                                   <div className="flex items-center justify-between text-[11px] font-medium text-zinc-500">
-                                    <span>Focus level</span>
+                                    <span>{t("focusLevel")}</span>
                                     <span>{meta.weight}%</span>
                                   </div>
                                   <div
@@ -520,7 +525,7 @@ export function SkillGapAnalyzer({
                   </div>
                 ) : (
                   <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900/60 dark:bg-emerald-950/40">
-                    No significant skill gaps were identified for this target.
+                    {t("noGaps")}
                   </p>
                 )}
               </div>
@@ -528,9 +533,9 @@ export function SkillGapAnalyzer({
           </div>
         ) : hasProfile ? (
           <div className="py-14 text-center">
-            <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">No skill gap report yet</h2>
+            <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">{t("noReport")}</h2>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-              Choose a target role and destination to generate your first prioritized skills plan.
+              {t("chooseTarget")}
             </p>
           </div>
         ) : null}

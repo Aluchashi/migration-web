@@ -2,6 +2,7 @@
 
 import { useState, type KeyboardEvent } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 
 import {
   BUDGETS,
@@ -109,6 +110,7 @@ function TagInput({
   onChange: (next: string[]) => void;
   placeholder: string;
 }) {
+  const t = useTranslations("Dashboard.profile");
   const [draft, setDraft] = useState("");
 
   function add(raw: string) {
@@ -142,7 +144,7 @@ function TagInput({
           {value}
           <button
             type="button"
-            aria-label={`Remove ${value}`}
+            aria-label={t("removeTag", { value })}
             onClick={() => onChange(values.filter((_, i) => i !== index))}
             className="flex h-5 w-5 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-200 hover:text-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
           >
@@ -176,6 +178,8 @@ function EntryCard({
   canRemove: boolean;
   children: React.ReactNode;
 }) {
+  const t = useTranslations("Dashboard.profile");
+
   return (
     <div className="relative rounded-2xl border border-zinc-200 bg-muted/50 p-4 sm:p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
       <div className="mb-4 flex items-center justify-between">
@@ -184,7 +188,7 @@ function EntryCard({
           <button
             type="button"
             onClick={onRemove}
-            aria-label={`Remove ${title}`}
+            aria-label={t("removeTag", { value: title })}
             className="flex h-7 w-7 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/50 dark:hover:text-red-400"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
@@ -212,6 +216,7 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+  const t = useTranslations("Dashboard.profile");
 
   return (
     <button
@@ -219,7 +224,7 @@ function SubmitButton() {
       disabled={pending}
       className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-400"
     >
-      {pending ? "Saving..." : "Save profile"}
+      {pending ? t("saving") : t("saveProfile")}
     </button>
   );
 }
@@ -248,6 +253,7 @@ const emptyLanguage: LanguageItem = { name: "", proficiency: "" };
 export function ProfileForm({ initialValues }: ProfileFormProps) {
   const [state, formAction] = useFormState(saveProfile, initialState);
   const [clientError, setClientError] = useState<string | null>(null);
+  const t = useTranslations("Dashboard.profile");
 
   const [works, setWorks] = useState<WorkItem[]>(
     initialValues.workExperiences.length > 0 ? initialValues.workExperiences : [],
@@ -291,19 +297,19 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
 
     if (name.length < 2) {
       event.preventDefault();
-      setClientError("Full name is required (at least 2 characters).");
+      setClientError(t("nameRequired"));
       return;
     }
 
     if (!/^(\+?880|0)1[3-9]\d{8}$/.test(phone.replace(/[\s()-]/g, ""))) {
       event.preventDefault();
-      setClientError("A valid Bangladeshi mobile number is required (e.g. 01712345678).");
+      setClientError(t("phoneRequired"));
       return;
     }
 
     if (!educations.some((entry) => entry.level)) {
       event.preventDefault();
-      setClientError("Add at least one education entry (degree or certificate).");
+      setClientError(t("educationRequired"));
       return;
     }
   }
@@ -320,11 +326,11 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
       <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="01"
-          title="Personal Information"
-          subtitle="Basic details that identify you and your background."
+          title={t("personalInfo")}
+          subtitle={t("personalInfoDesc")}
         />
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <Field label="Full name">
+          <Field label={t("fullName")}>
             <input
               type="text"
               name="name"
@@ -332,10 +338,10 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
               maxLength={80}
               required
               className={inputClass()}
-              placeholder="As per national identity"
+              placeholder={t("asPerNid")}
             />
           </Field>
-          <Field label="Date of birth">
+          <Field label={t("dob")}>
             <input
               type="date"
               name="dateOfBirth"
@@ -345,7 +351,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
               className={inputClass()}
             />
           </Field>
-          <Field label="Phone / WhatsApp">
+          <Field label={t("phone")}>
             <input
               type="tel"
               name="phone"
@@ -356,7 +362,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
               placeholder="01712345678"
             />
           </Field>
-          <Field label="NID number" hint="Optional — 8 to 17 digits.">
+          <Field label={t("nid")} hint={t("nidHint")}>
             <input
               type="text"
               name="nid"
@@ -364,17 +370,17 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
               defaultValue={initialValues.nid}
               maxLength={17}
               className={inputClass()}
-              placeholder="e.g. 1990123456789"
+              placeholder={t("nidPlaceholder")}
             />
           </Field>
-          <Field label="Current district / city">
+          <Field label={t("location")}>
             <input
               type="text"
               name="district"
               defaultValue={initialValues.district}
               maxLength={80}
               className={inputClass()}
-              placeholder="e.g. Dhaka, Chattogram"
+              placeholder={t("locationPlaceholder")}
             />
           </Field>
         </div>
@@ -383,47 +389,47 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
       <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="02"
-          title="Work Experience"
-          subtitle="Add each job you have held. Freshers can skip this section."
+          title={t("workExperience")}
+          subtitle={t("workExperienceDesc")}
         />
         <div className="mt-6 space-y-4">
           {works.map((work, index) => (
             <EntryCard
               key={index}
-              title={`Work experience ${index + 1}`}
+              title={t("workExperience_n", { n: index + 1 })}
               canRemove={works.length > 0}
               onRemove={() => setWorks((current) => current.filter((_, i) => i !== index))}
             >
-              <Field label="Job title">
+              <Field label={t("jobTitle")}>
                 <input
                   type="text"
                   value={work.jobTitle}
                   onChange={(event) => updateWork(index, { jobTitle: event.target.value })}
                   maxLength={120}
                   className={inputClass()}
-                  placeholder="e.g. Construction helper"
+                  placeholder={t("jobTitlePlaceholder")}
                 />
               </Field>
-              <Field label="Industry / sector">
+              <Field label={t("industry")}>
                 <Dropdown
                   options={INDUSTRIES.map((industry) => ({ value: industry, label: industry }))}
                   value={work.industry}
                   onValueChange={(v) => updateWork(index, { industry: v })}
-                  placeholder="Select industry"
-                  title="Industry / sector"
+                  placeholder={t("selectIndustry")}
+                  title={t("industry")}
                 />
               </Field>
-              <Field label="Employer / company" hint="Optional.">
+              <Field label={t("employer")} hint={t("optional")}>
                 <input
                   type="text"
                   value={work.employer}
                   onChange={(event) => updateWork(index, { employer: event.target.value })}
                   maxLength={120}
                   className={inputClass()}
-                  placeholder="e.g. ABC Constructions"
+                  placeholder={t("employerPlaceholder")}
                 />
               </Field>
-              <Field label="Years in this role">
+              <Field label={t("yearsInRole")}>
                 <input
                   type="number"
                   value={work.years}
@@ -434,7 +440,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                   placeholder="0"
                 />
               </Field>
-              <Field label="Start date (month & year)">
+              <Field label={t("startDate")}>
                 <input
                   type="month"
                   value={work.startDate}
@@ -442,7 +448,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                   className={inputClass()}
                 />
               </Field>
-              <Field label="End date (month & year)">
+              <Field label={t("endDate")}>
                 <input
                   type="month"
                   value={work.endDate}
@@ -463,12 +469,12 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                   }
                   className="h-4 w-4 rounded border-zinc-300 accent-emerald-600 dark:border-zinc-600 dark:accent-emerald-500"
                 />
-                Currently working here
+                {t("currentlyWorking")}
               </label>
               <div className="sm:col-span-2">
                 <Field
-                  label="Brief job description"
-                  hint="2-3 lines about daily duties — helps AI understand your real skills."
+                  label={t("jobDesc")}
+                  hint={t("jobDescHint")}
                 >
                   <textarea
                     value={work.description}
@@ -476,14 +482,14 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                     maxLength={1000}
                     rows={3}
                     className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/20"
-                    placeholder="e.g. Mixing cement, assisting masons, carrying materials, following site safety rules."
+                    placeholder={t("jobDescPlaceholder")}
                   />
                 </Field>
               </div>
             </EntryCard>
           ))}
           <AddButton
-            label="Add another work experience"
+            label={t("addWork")}
             onClick={() => setWorks((current) => [...current, { ...emptyWork }])}
           />
         </div>
@@ -492,47 +498,47 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
       <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="03"
-          title="Education"
-          subtitle="At least one degree or certificate is required."
+          title={t("education")}
+          subtitle={t("educationDesc")}
         />
         <div className="mt-6 space-y-4">
           {educations.map((education, index) => (
             <EntryCard
               key={index}
-              title={`Education ${index + 1}`}
+              title={t("education_n", { n: index + 1 })}
               canRemove={educations.length > 1}
               onRemove={() => setEducations((current) => current.filter((_, i) => i !== index))}
             >
-              <Field label="Degree / certificate level">
+              <Field label={t("degree")}>
                 <Dropdown
                   options={EDUCATION_LEVELS.map((level) => ({ value: level, label: level }))}
                   value={education.level}
                   onValueChange={(v) => updateEducation(index, { level: v })}
-                  placeholder="Select level"
-                  title="Degree / certificate level"
+                  placeholder={t("selectLevel")}
+                  title={t("degree")}
                 />
               </Field>
-              <Field label="Field of study / trade" hint="Optional — e.g. Electrical, Business Studies.">
+              <Field label={t("fieldOfStudy")} hint={t("fieldOfStudyHint")}>
                 <input
                   type="text"
                   value={education.field}
                   onChange={(event) => updateEducation(index, { field: event.target.value })}
                   maxLength={120}
                   className={inputClass()}
-                  placeholder="e.g. Electrical"
+                  placeholder={t("fieldPlaceholder")}
                 />
               </Field>
-              <Field label="Institution name">
+              <Field label={t("institution")}>
                 <input
                   type="text"
                   value={education.institution}
                   onChange={(event) => updateEducation(index, { institution: event.target.value })}
                   maxLength={160}
                   className={inputClass()}
-                  placeholder="e.g. Dhaka Polytechnic Institute"
+                  placeholder={t("institutionPlaceholder")}
                 />
               </Field>
-              <Field label="Passing year">
+              <Field label={t("passingYear")}>
                 <input
                   type="number"
                   value={education.passingYear}
@@ -540,23 +546,23 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                   min={1970}
                   max={2030}
                   className={inputClass()}
-                  placeholder="e.g. 2020"
+                  placeholder={t("yearPlaceholder")}
                 />
               </Field>
-              <Field label="Result / grade" hint="Optional.">
+              <Field label={t("result")} hint={t("optional")}>
                 <input
                   type="text"
                   value={education.result}
                   onChange={(event) => updateEducation(index, { result: event.target.value })}
                   maxLength={60}
                   className={inputClass()}
-                  placeholder="e.g. GPA 4.50"
+                  placeholder={t("resultPlaceholder")}
                 />
               </Field>
             </EntryCard>
           ))}
           <AddButton
-            label="Add another degree / certificate"
+            label={t("addEducation")}
             onClick={() => setEducations((current) => [...current, { ...emptyEducation }])}
           />
         </div>
@@ -565,18 +571,18 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
       <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="04"
-          title="Skills"
-          subtitle="Type a skill and press Enter. Click x to remove."
+          title={t("skills")}
+          subtitle={t("skillsDesc")}
         />
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <Field label="Technical / vocational skills">
-            <TagInput values={skills} onChange={setSkills} placeholder="e.g. Welding, Excel, Sewing" />
+          <Field label={t("technicalSkills")}>
+            <TagInput values={skills} onChange={setSkills} placeholder={t("techSkillPlaceholder")} />
           </Field>
-          <Field label="Soft skills" hint="Optional.">
+          <Field label={t("softSkills")} hint={t("optional")}>
             <TagInput
               values={softSkills}
               onChange={setSoftSkills}
-              placeholder="e.g. Teamwork, Communication"
+              placeholder={t("softSkillPlaceholder")}
             />
           </Field>
         </div>
@@ -585,18 +591,18 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
       <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="05"
-          title="Languages"
-          subtitle="Include a proficiency level for each language."
+          title={t("languages")}
+          subtitle={t("languagesDesc")}
         />
         <div className="mt-6 space-y-4">
           {languages.map((language, index) => (
             <EntryCard
               key={index}
-              title={`Language ${index + 1}`}
+              title={t("language_n", { n: index + 1 })}
               canRemove={languages.length > 0}
               onRemove={() => setLanguages((current) => current.filter((_, i) => i !== index))}
             >
-              <Field label="Language">
+              <Field label={t("language")}>
                 <input
                   type="text"
                   value={language.name}
@@ -604,16 +610,16 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
                   maxLength={40}
                   list="language-suggestions"
                   className={inputClass()}
-                  placeholder="e.g. English, Arabic"
+                  placeholder={t("languagePlaceholder")}
                 />
               </Field>
-              <Field label="Proficiency level">
+              <Field label={t("proficiency")}>
                 <Dropdown
                   options={PROFICIENCY_LEVELS.map((level) => ({ value: level, label: level }))}
                   value={language.proficiency}
                   onValueChange={(v) => updateLanguage(index, { proficiency: v })}
-                  placeholder="Select level"
-                  title="Proficiency level"
+                  placeholder={t("selectLevel")}
+                  title={t("proficiency")}
                 />
               </Field>
             </EntryCard>
@@ -624,7 +630,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
             ))}
           </datalist>
           <AddButton
-            label="Add another language"
+            label={t("addLanguage")}
             onClick={() => setLanguages((current) => [...current, { ...emptyLanguage }])}
           />
         </div>
@@ -633,12 +639,12 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
       <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
         <SectionHeading
           number="06"
-          title="Migration Preferences"
-          subtitle="Where you want to go, and when."
+          title={t("migrationPrefs")}
+          subtitle={t("migrationPrefsDesc")}
         />
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Field label="Preferred countries / regions" hint="Select all that apply.">
+            <Field label={t("preferredCountries")} hint={t("selectAll")}>
               <div className="flex flex-wrap gap-2">
                 {REGION_OPTIONS.map((region) => {
                   const active = regions.includes(region);
@@ -662,49 +668,49 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
               </div>
             </Field>
           </div>
-          <Field label="Budget range">
+          <Field label={t("budget")}>
             <Dropdown
               name="budget"
               defaultValue={initialValues.budget}
               options={[
-                { value: "", label: "Not specified" },
+                { value: "", label: t("notSpecified") },
                 ...(initialValues.budget && !BUDGETS.includes(initialValues.budget)
                   ? [{ value: initialValues.budget, label: initialValues.budget }]
                   : []),
                 ...BUDGETS.map((budget) => ({ value: budget, label: budget })),
               ]}
-              placeholder="Not specified"
-              title="Budget range"
+              placeholder={t("notSpecified")}
+              title={t("budget")}
             />
           </Field>
-          <Field label="Timeline / urgency">
+          <Field label={t("timeline")}>
             <Dropdown
               name="timeline"
               defaultValue={initialValues.timeline}
               options={[
-                { value: "", label: "Not specified" },
+                { value: "", label: t("notSpecified") },
                 ...(initialValues.timeline && !TIMELINES.includes(initialValues.timeline)
                   ? [{ value: initialValues.timeline, label: initialValues.timeline }]
                   : []),
                 ...TIMELINES.map((timeline) => ({ value: timeline, label: timeline })),
               ]}
-              placeholder="Not specified"
-              title="Timeline / urgency"
+              placeholder={t("notSpecified")}
+              title={t("timeline")}
             />
           </Field>
-          <Field label="Family status" hint="Optional.">
+          <Field label={t("familyStatus")} hint={t("optional")}>
             <Dropdown
               name="familyStatus"
               defaultValue={initialValues.familyStatus}
               options={[
-                { value: "", label: "Not specified" },
+                { value: "", label: t("notSpecified") },
                 ...(initialValues.familyStatus && !FAMILY_STATUSES.includes(initialValues.familyStatus)
                   ? [{ value: initialValues.familyStatus, label: initialValues.familyStatus }]
                   : []),
                 ...FAMILY_STATUSES.map((status) => ({ value: status, label: status })),
               ]}
-              placeholder="Not specified"
-              title="Family status"
+              placeholder={t("notSpecified")}
+              title={t("familyStatus")}
             />
           </Field>
         </div>
@@ -727,7 +733,7 @@ export function ProfileForm({ initialValues }: ProfileFormProps) {
               </p>
             ) : (
               <p className="truncate text-sm text-zinc-500">
-                Check everything before saving — entries are replaced on each save.
+                {t("checkBeforeSave")}
               </p>
             )}
           </div>

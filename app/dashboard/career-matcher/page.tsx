@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { CareerMatcher } from "@/components/Page5-CareerCountry/career-matcher";
 import { getAuthenticatedUser } from "@/lib/auth-user";
@@ -17,6 +18,8 @@ export default async function CareerMatcherPage() {
   if (!user) {
     redirect("/login");
   }
+
+  const t = await getTranslations("Dashboard.careerMatcher");
 
   const profile = await prisma.profile.findUnique({
     where: { userId: user.id },
@@ -41,12 +44,7 @@ export default async function CareerMatcherPage() {
 
   const effectiveGaps =
     snapshot && !hasAnyCoreData
-      ? Array.from(
-          new Set([
-            ...essentialGaps,
-            "Add your work experience, education, or skills",
-          ]),
-        )
+      ? Array.from(new Set([...essentialGaps, t("essentialFallback")]))
       : essentialGaps;
 
   return (

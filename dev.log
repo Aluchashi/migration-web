@@ -1,0 +1,145 @@
+
+> migration-web@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 5.4s
+ ○ Compiling /login ...
+ ✓ Compiled /login in 12.6s (1564 modules)
+ GET /login 200 in 1981ms
+ GET /login 200 in 153ms
+ GET /login 200 in 86ms
+ ○ Compiling / ...
+ ✓ Compiled / in 9.7s (13935 modules)
+ GET / 200 in 10405ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1190ms (199 modules)
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard 200 in 341ms
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard 200 in 94ms
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Fprofile 200 in 74ms
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Fscam-checker 200 in 92ms
+ GET / 200 in 210ms
+ GET /login 200 in 133ms
+ GET / 200 in 125ms
+ GET /login 200 in 79ms
+ GET /login 200 in 84ms
+ ✓ Compiled in 2.1s
+ ○ Compiling / ...
+ ✓ Compiled / in 7.1s (6944 modules)
+ GET / 200 in 919ms
+ GET / 200 in 151ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 8s (14332 modules)
+ GET /dashboard 200 in 6784ms
+ ○ Compiling /dashboard/scam-checker ...
+ ✓ Compiled /dashboard/scam-checker in 1989ms (14339 modules)
+ GET /dashboard/scam-checker?_rsc=1tqq7 200 in 714ms
+ GET /dashboard/scam-checker?_rsc=1lrwq 200 in 683ms
+ ○ Compiling /dashboard/learning-roadmap ...
+ ✓ Compiled /dashboard/learning-roadmap in 2.8s (14354 modules)
+ GET /dashboard/learning-roadmap?_rsc=1rvet 200 in 3004ms
+ ○ Compiling /dashboard/legal-guidance ...
+ ✓ Compiled /dashboard/legal-guidance in 2.4s (14362 modules)
+ GET /dashboard/legal-guidance?_rsc=ihszv 200 in 1956ms
+ ○ Compiling /api/legal-guidance-progress/item ...
+ ✓ Compiled /api/legal-guidance-progress/item in 1620ms (7406 modules)
+ POST /api/legal-guidance-progress/item 200 in 4710ms
+ POST /api/legal-guidance-progress/item 200 in 2570ms
+ GET /dashboard/legal-guidance?_rsc=aizix 200 in 2033ms
+ GET /dashboard/legal-guidance?_rsc=aizix 200 in 1946ms
+ ✓ Compiled in 4.1s (7402 modules)
+ ✓ Compiled in 1449ms (7402 modules)
+ ✓ Compiled in 1389ms (7402 modules)
+ ✓ Compiled in 1424ms (7402 modules)
+ ✓ Compiled in 4s (7402 modules)
+ ✓ Compiled in 7.4s (14376 modules)
+ GET / 200 in 903ms
+ GET / 200 in 1039ms
+ GET /dashboard 200 in 1870ms
+ GET /dashboard?_rsc=syt8b 200 in 1310ms
+ GET /dashboard/legal-guidance?_rsc=ihszv 200 in 1987ms
+ ○ Compiling /api/legal-guidance-progress/item ...
+ ✓ Compiled /api/legal-guidance-progress/item in 4.1s (7406 modules)
+ POST /api/legal-guidance-progress/item 200 in 7325ms
+ GET /dashboard/legal-guidance?_rsc=aizix 200 in 3111ms
+ GET /dashboard/legal-guidance?_rsc=aizix 200 in 2005ms
+ GET /dashboard/legal-guidance 200 in 2674ms
+ ✓ Compiled in 10.8s (14376 modules)
+ GET /dashboard/legal-guidance?_rsc=aizix 200 in 2486ms
+ ✓ Compiled in 1109ms (7402 modules)
+ ✓ Compiled in 802ms (7402 modules)
+ ✓ Compiled in 853ms (7402 modules)
+ ✓ Compiled in 1168ms (7402 modules)
+ ✓ Compiled in 791ms (7402 modules)
+ ✓ Compiled in 2.5s (14376 modules)
+ GET /dashboard/legal-guidance?_rsc=aizix 200 in 2229ms
+ ✓ Compiled in 1753ms (7402 modules)
+ GET /dashboard/legal-guidance 200 in 2577ms
+ ✓ Compiled in 5.2s (14376 modules)
+ ⨯ PrismaClientKnownRequestError: 
+Invalid `prisma.legalGuidanceChecklistProgress.findMany()` invocation:
+
+
+Server has closed the connection.
+    at async LegalGuidancePage (./app/dashboard/legal-guidance/page.tsx:35:18)
+digest: "989459718"
+ GET /dashboard/legal-guidance?_rsc=aizix 200 in 22353ms
+ ○ Compiling /_not-found ...
+ GET / 404 in 7407ms
+ ✓ Compiled /_not-found in 13.4s (14379 modules)
+RangeError: Failed to allocate memory
+    at createUnsafeBuffer (node:internal/buffer:1095:25)
+    at allocate (node:buffer:472:10)
+    at Buffer.allocUnsafe (node:buffer:435:10)
+    at Gzip.ZlibBase (node:zlib:264:28)
+    at Gzip.Zlib (node:zlib:683:12)
+    at new Gzip (node:zlib:744:8)
+    at value (node:zlib:944:14)
+    at E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1215843
+    at new Promise (<anonymous>)
+    at writeFile (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1215751)
+    at serialize (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1213615)
+    at async Promise.all (index 35)
+    at async serialize (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1212754)
+    at async E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:540196 {
+  code: 'ERR_MEMORY_ALLOCATION_FAILED'
+}
+ ⨯ unhandledRejection: RangeError: Failed to allocate memory
+    at createUnsafeBuffer (node:internal/buffer:1095:25)
+    at allocate (node:buffer:472:10)
+    at Buffer.allocUnsafe (node:buffer:435:10)
+    at Gzip.ZlibBase (node:zlib:264:28)
+    at Gzip.Zlib (node:zlib:683:12)
+    at new Gzip (node:zlib:744:8)
+    at value (node:zlib:944:14)
+    at E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1215843
+    at new Promise (<anonymous>)
+    at writeFile (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1215751)
+    at serialize (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1213615)
+    at async Promise.all (index 35)
+    at async serialize (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1212754)
+    at async E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:540196 {
+  code: 'ERR_MEMORY_ALLOCATION_FAILED'
+}
+ ⨯ unhandledRejection: RangeError: Failed to allocate memory
+    at createUnsafeBuffer (node:internal/buffer:1095:25)
+    at allocate (node:buffer:472:10)
+    at Buffer.allocUnsafe (node:buffer:435:10)
+    at Gzip.ZlibBase (node:zlib:264:28)
+    at Gzip.Zlib (node:zlib:683:12)
+    at new Gzip (node:zlib:744:8)
+    at value (node:zlib:944:14)
+    at E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1215843
+    at new Promise (<anonymous>)
+    at writeFile (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1215751)
+    at serialize (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1213615)
+    at async Promise.all (index 35)
+    at async serialize (E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:1212754)
+    at async E:\Programming\Project\migration-web\node_modules\next\dist\compiled\webpack\bundle5.js:28:540196 {
+  code: 'ERR_MEMORY_ALLOCATION_FAILED'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: RangeError: Failed to allocate memory

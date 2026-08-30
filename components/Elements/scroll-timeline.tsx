@@ -78,11 +78,10 @@ export function ScrollTimeline({ events, onToggleItem, pendingKeys }: ScrollTime
         />
       </svg>
 
-      {events.map((event, index) => {
+      {events.map((event) => {
         const items = event.checklistItems ?? [];
         const completedCount = items.filter((item) => item.completed).length;
         const allDone = items.length > 0 && completedCount === items.length;
-        const shift = index % 2 === 0 ? "-4px" : "4px";
 
         return (
           <motion.li
@@ -93,21 +92,7 @@ export function ScrollTimeline({ events, onToggleItem, pendingKeys }: ScrollTime
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="relative"
           >
-            <span
-              style={{ transform: `translateX(${shift})` }}
-              className={`absolute left-[1.75rem] top-1 flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-bold transition ${
-                allDone
-                  ? "border-emerald-500 bg-emerald-500 text-white"
-                  : "border-emerald-500 bg-emerald-50 text-emerald-700 dark:border-emerald-400 dark:bg-emerald-500/10 dark:text-emerald-300"
-              }`}
-            >
-              {allDone ? <HugeiconsIcon icon={Tick02Icon} className="h-5 w-5" /> : index + 1}
-            </span>
-
             <div className="rounded-3xl border border-zinc-200 bg-muted/50 p-6 shadow-sm transition dark:border-zinc-800 dark:bg-zinc-900/60">
-              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                Step {index + 1}
-              </p>
               <h3 className="mt-1 bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-3xl font-bold text-transparent">
                 {event.year}
               </h3>

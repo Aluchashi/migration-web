@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   UserIcon,
@@ -33,59 +34,61 @@ export function OverviewCards({
   reportCount,
   legalSteps,
 }: OverviewCardsProps) {
+  const t = useTranslations("Dashboard.overview");
+
   const cards = [
     {
-      title: "Career profile",
+      titleKey: "careerProfileTitle",
       href: "/dashboard/profile",
-      desc: "Add your work history, skills, languages, budget, and destination preferences.",
+      descKey: "careerProfileDesc",
       icon: UserIcon,
       tint: "text-emerald-500",
-      badge: profileSaved ? "Saved" : "Not started",
+      badge: profileSaved ? t("saved") : t("notStarted"),
       badgeClass: profileSaved ? "text-emerald-600" : "",
     },
     {
-      title: "Career & Country Matcher",
+      titleKey: "matcherTitle",
       href: "/dashboard/career-matcher",
-      desc: "Generate country fit scores, suitable job paths, and a requirements checklist.",
+      descKey: "matcherDesc",
       icon: GlobalSearchIcon,
       tint: "text-purple-500",
-      badge: `${matchCount} saved`,
+      badge: t("itemsSaved", { count: matchCount }),
       badgeClass: "",
     },
     {
-      title: "Skill Gap Analyzer",
+      titleKey: "skillGapTitle",
       href: "/dashboard/skill-gap",
-      desc: "Prioritize the skills, training, and qualifications needed for a target role.",
+      descKey: "skillGapDesc",
       icon: ChartUpIcon,
       tint: "text-blue-500",
-      badge: `${reportCount} saved`,
+      badge: t("itemsSaved", { count: reportCount }),
       badgeClass: "",
     },
     {
-      title: "Legal Migration Guidance",
+      titleKey: "legalTitle",
       href: "/dashboard/legal-guidance",
-      desc: "Step-by-step government process, documents, and cost transparency for your destination.",
+      descKey: "legalDesc",
       icon: Navigation04Icon,
       tint: "text-orange-500",
-      badge: `${legalSteps} steps done`,
+      badge: t("stepsDone", { count: legalSteps }),
       badgeClass: "",
     },
     {
-      title: "Learning Roadmap",
+      titleKey: "roadmapTitle",
       href: "/dashboard/learning-roadmap",
-      desc: "An ordered study and training plan to close your skill gaps for a target role abroad.",
+      descKey: "roadmapDesc",
       icon: GraduationCapIcon,
       tint: "text-pink-500",
-      badge: "Plan your path",
+      badge: t("planPath"),
       badgeClass: "",
     },
     {
-      title: "Scam Risk Checker",
+      titleKey: "scamTitle",
       href: "/dashboard/scam-checker",
-      desc: "Screen a recruitment agency against common warning signs before you pay.",
+      descKey: "scamDesc",
       icon: ShieldAlertIcon,
       tint: "text-red-500",
-      badge: "Stay safe",
+      badge: t("staySafe"),
       badgeClass: "",
     },
   ];
@@ -107,7 +110,7 @@ export function OverviewCards({
 
             <div className="flex items-start justify-between gap-3">
               <h3 className="text-lg font-medium text-zinc-950 dark:text-zinc-50">
-                {card.title}
+                {t(card.titleKey)}
               </h3>
               <HugeiconsIcon
                 icon={ArrowUpRight01Icon}
@@ -116,7 +119,7 @@ export function OverviewCards({
             </div>
 
             <p className="text-muted-foreground mt-2 text-sm leading-6">
-              {card.desc}
+              {t(card.descKey)}
             </p>
 
             <div className={`${BADGE_WRAP} mt-4`}>

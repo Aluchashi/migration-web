@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { ScrollTimeline, type TimelineEvent } from "@/components/Elements/scroll-timeline";
 import { Dropdown } from "@/components/Elements/dropdown";
@@ -16,36 +17,38 @@ type LegalGuidanceProps = {
   checklistProgress: Record<string, Record<string, Record<string, true>>>;
 };
 
-const confidenceBadge: Record<Confidence, { label: string; className: string }> = {
+const confidenceBadge: Record<Confidence, { labelKey: "verified" | "notOfficial"; className: string }> = {
   verified: {
-    label: "✅ Officially Verified",
+    labelKey: "verified" as const,
     className: "bg-emerald-50 text-emerald-700 ring-emerald-200",
   },
   estimated: {
-    label: "⚠️ Industry-typical, Not Officially Confirmed",
+    labelKey: "notOfficial" as const,
     className: "bg-amber-50 text-amber-700 ring-amber-200",
   },
 };
 
 function ConfidencePill({ confidence }: { confidence: Confidence }) {
+  const t = useTranslations("Dashboard.legalGuidance");
   const meta = confidenceBadge[confidence];
   return (
     <span
       className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold ring-1 ring-inset ${meta.className}`}
     >
-      {meta.label}
+      {t(meta.labelKey)}
     </span>
   );
 }
 
 function SourceTag({ source, sourceUrl, date }: { source: string; sourceUrl: string; date: string }) {
+  const t = useTranslations("Dashboard.legalGuidance");
   return (
     <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-      Source:{" "}
+      {t("source")}{" "}
       <a href={sourceUrl} target="_blank" rel="noreferrer" className="text-emerald-700 hover:underline dark:text-emerald-400">
         {source}
       </a>{" "}
-      · verified {date}
+      · {t("verifiedLabel")} {date}
     </p>
   );
 }
@@ -117,6 +120,7 @@ export function LegalGuidance({
   const [done, setDone] = useState<Record<string, Record<string, Record<string, true>>>>(checklistProgress);
   const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("Dashboard.legalGuidance");
 
   const country = useMemo(
     () => countries.find((item) => item.corridorId === selected) ?? countries[0],
@@ -140,7 +144,7 @@ export function LegalGuidance({
     () =>
       steps.map((step, index) => ({
         id: step.id,
-        year: `Phase ${index + 1}`,
+        year: t("phase", { phase: index + 1 }),
         title: step.titleBn,
         subtitle: step.titleEn,
         description: step.description,
@@ -150,7 +154,7 @@ export function LegalGuidance({
           completed: Boolean(done[selected]?.[step.id]?.[String(i)]),
         })),
       })),
-    [steps, done, selected],
+    [steps, done, selected, t],
   );
 
   async function handleToggleItem(phaseId: string, itemId: string, completed: boolean) {
@@ -195,12 +199,9 @@ export function LegalGuidance({
   return (
     <>
       <div className="border-b border-zinc-200 pb-7 dark:border-zinc-800">
-        <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">Official process, made clear</p>
-        <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl dark:text-zinc-50">Legal Migration Guidance</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-          Step-by-step government process for your selected destination. Tick off each checklist item as you go - your
-          progress is saved and the timeline fills in as you scroll.
-        </p>
+        <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">{t("subtitle")}</p>
+        <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl dark:text-zinc-50">{t("title")}</h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">{t("intro")}</p>
       </div>
 
       <div className="mt-6 flex flex-col gap-4 rounded-3xl border border-zinc-200 bg-muted/50 p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800 dark:bg-zinc-900/60">
@@ -215,8 +216,8 @@ export function LegalGuidance({
             }))}
             value={selected}
             onValueChange={(v) => setSelected(v)}
-            placeholder="Select a corridor"
-            title="Country & job corridor"
+            placeholder={t("selectCorridor")}
+            title={t("countryJob")}
             className="max-w-sm"
           />
         </div>
@@ -233,7 +234,7 @@ export function LegalGuidance({
       ) : null}
 
       <h2 className="mt-8 text-lg font-semibold text-zinc-950 dark:text-zinc-50">
-        Pre-Departure Process ({country.country})
+        {t("preDeparture", { country: country.country })}
       </h2>
 
       <div className="mt-4">
@@ -247,12 +248,12 @@ export function LegalGuidance({
       ) : null}
 
       <div className="mt-10 space-y-4">
-        <SectionCard title="Recruiting Agency Verification" defaultOpen>
+        <SectionCard title={t("agencyVerification")} defaultOpen>
           <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
             <p>
               BAIRA লাইসেন্স যাচাই করুন:{" "}
               <a href={country.agency.bairaCheckUrl} target="_blank" rel="noreferrer" className="font-medium text-emerald-700 hover:underline dark:text-emerald-400">
-                BAIRA portal ↗
+                {t("bairaPortal")} ↗
               </a>
             </p>
             <p>{country.agency.boeslNote}</p>
@@ -263,10 +264,10 @@ export function LegalGuidance({
           </div>
         </SectionCard>
 
-        <SectionCard title="Country-Specific Requirements">
+        <SectionCard title={t("countryRequirements")}>
           <div className="space-y-4 text-sm text-zinc-700 dark:text-zinc-300">
             <div>
-              <p className="font-semibold text-zinc-900 dark:text-zinc-100">Visa</p>
+              <p className="font-semibold text-zinc-900 dark:text-zinc-100">{t("visa")}</p>
               <p>
                 <span className="font-medium">{country.visa.type}</span> — {country.visa.validity}
               </p>
@@ -277,7 +278,7 @@ export function LegalGuidance({
               </div>
             </div>
             <div>
-              <p className="font-semibold text-zinc-900 dark:text-zinc-100">Medical check-up</p>
+              <p className="font-semibold text-zinc-900 dark:text-zinc-100">{t("medical")}</p>
               <p>{country.medical.requirement}</p>
               <div className="mt-1 flex flex-wrap items-center gap-2">
                 <ConfidencePill confidence={country.medical.confidence} />
@@ -285,7 +286,7 @@ export function LegalGuidance({
               </div>
             </div>
             <div>
-              <p className="font-semibold text-zinc-900 dark:text-zinc-100">Embassy attestation</p>
+              <p className="font-semibold text-zinc-900 dark:text-zinc-100">{t("embassy")}</p>
               <p>
                 {country.embassyAttestation.required ? "প্রয়োজন" : "সাধারণত লাগে না"} — {country.embassyAttestation.note}
               </p>
@@ -299,7 +300,7 @@ export function LegalGuidance({
               </div>
             </div>
             <div>
-              <p className="font-semibold text-zinc-900 dark:text-zinc-100">Document checklist</p>
+              <p className="font-semibold text-zinc-900 dark:text-zinc-100">{t("documents")}</p>
               <ul className="mt-1 list-inside list-disc text-zinc-700 dark:text-zinc-300">
                 {country.documentChecklist.map((doc) => (
                   <li key={doc}>{doc}</li>
@@ -309,14 +310,14 @@ export function LegalGuidance({
           </div>
         </SectionCard>
 
-        <SectionCard title="Cost Transparency">
+        <SectionCard title={t("costTransparency")}>
           <div className="space-y-3">
             <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 dark:border-emerald-900/60 dark:bg-emerald-950/40">
-              <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Government cap</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">{t("governmentCap")}</p>
               <p className="mt-1 text-sm font-medium text-emerald-900 dark:text-emerald-200">{country.cost.governmentCapLabel}</p>
             </div>
             <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-900/60 dark:bg-red-950/40">
-              <p className="text-xs font-semibold uppercase tracking-wide text-red-700 dark:text-red-400">⚠️ Warning</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-red-700 dark:text-red-400">{t("warning")}</p>
               <p className="mt-1 text-sm text-red-800 dark:text-red-300">{country.cost.warningNote}</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -326,16 +327,16 @@ export function LegalGuidance({
           </div>
         </SectionCard>
 
-        <SectionCard title="Post-Arrival Safety">
+        <SectionCard title={t("postArrival")}>
           <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
             <p>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-100">Embassy:</span> {country.postArrival.embassyContact}
+              <span className="font-semibold text-zinc-900 dark:text-zinc-100">{t("embassyLabel")}</span> {country.postArrival.embassyContact}
             </p>
             <p>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-100">Helpline:</span> {country.postArrival.helpline}
+              <span className="font-semibold text-zinc-900 dark:text-zinc-100">{t("helpline")}</span> {country.postArrival.helpline}
             </p>
             <p>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-100">Complaint:</span> {country.postArrival.complaintProcess}
+              <span className="font-semibold text-zinc-900 dark:text-zinc-100">{t("complaint")}</span> {country.postArrival.complaintProcess}
             </p>
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <ConfidencePill confidence={country.postArrival.confidence} />

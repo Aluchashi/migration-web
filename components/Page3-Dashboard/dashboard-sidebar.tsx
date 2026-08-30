@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useTransition } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   DashboardSquare02Icon,
@@ -14,6 +16,7 @@ import {
   Settings01Icon,
   Logout02Icon,
   SidebarLeft01Icon,
+  LanguagesIcon,
 } from "@hugeicons/core-free-icons";
 
 import { logout } from "@/app/actions/auth";
@@ -33,36 +36,73 @@ import {
 } from "@/components/ui/sidebar";
 
 const mainNav = [
-  { title: "Overview", href: "/dashboard", icon: DashboardSquare02Icon },
-  { title: "Career Matcher", href: "/dashboard/career-matcher", icon: GlobalSearchIcon },
-  { title: "Skill gap", href: "/dashboard/skill-gap", icon: ChartUpIcon },
   {
-    title: "Learning roadmap",
+    titleKey: "overview",
+    href: "/dashboard",
+    icon: DashboardSquare02Icon,
+  },
+  {
+    titleKey: "careerMatcher",
+    href: "/dashboard/career-matcher",
+    icon: GlobalSearchIcon,
+  },
+  { titleKey: "skillGap", href: "/dashboard/skill-gap", icon: ChartUpIcon },
+  {
+    titleKey: "learningRoadmap",
     href: "/dashboard/learning-roadmap",
     icon: GraduationCapIcon,
   },
-  { title: "Legal Guidance", href: "/dashboard/legal-guidance", icon: Navigation04Icon },
-  { title: "Scam Checker", href: "/dashboard/scam-checker", icon: ShieldAlertIcon },
+  {
+    titleKey: "legalGuidance",
+    href: "/dashboard/legal-guidance",
+    icon: Navigation04Icon,
+  },
+  { titleKey: "scamChecker", href: "/dashboard/scam-checker", icon: ShieldAlertIcon },
 ];
 
 const bottomNav = [
-  { title: "Profile", href: "/dashboard/profile", icon: UserIcon },
-  { title: "Settings", href: "/dashboard/settings", icon: Settings01Icon },
+  { titleKey: "profile", href: "/dashboard/profile", icon: UserIcon },
+  { titleKey: "settings", href: "/dashboard/settings", icon: Settings01Icon },
 ];
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
+  const locale = useLocale();
+  const t = useTranslations("Dashboard.sidebar");
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const isActive = (href: string) =>
     href === "/dashboard"
       ? pathname === href
       : pathname === href || pathname.startsWith(`${href}/`);
 
+  const switchTo = (next: "en" | "bn") => {
+    if (next === locale) return;
+    document.cookie = `NEXT_LOCALE=${next};path=/;max-age=31536000;samesite=lax`;
+    startTransition(() => router.refresh());
+  };
+
+  const actionButtonClass =
+    "flex h-8 w-8 shrink-0 items-center justify-center gap-0.5 rounded-md text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring";
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center justify-end px-2 py-1">
+        <div className="flex items-center justify-end gap-1 px-2 py-1">
+          <button
+            type="button"
+            onClick={() => switchTo(locale === "bn" ? "en" : "bn")}
+            className={actionButtonClass}
+            aria-label={locale === "bn" ? "Switch to English" : "বাংলায় দেখুন"}
+            title={locale === "bn" ? "English" : "বাংলা"}
+          >
+            <HugeiconsIcon icon={LanguagesIcon} className="size-5" strokeWidth={2} />
+            <span className="text-[10px] font-bold">
+              {locale === "bn" ? "EN" : "বাং"}
+            </span>
+          </button>
           <button
             type="button"
             onClick={toggleSidebar}
@@ -85,11 +125,11 @@ export function DashboardSidebar() {
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     isActive={isActive(item.href)}
-                    tooltip={item.title}
+                    tooltip={t(item.titleKey)}
                     render={<Link href={item.href} />}
                   >
                     <HugeiconsIcon icon={item.icon} />
-                    <span>{item.title}</span>
+                    <span>{t(item.titleKey)}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -104,23 +144,23 @@ export function DashboardSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 isActive={isActive(item.href)}
-                tooltip={item.title}
+                tooltip={t(item.titleKey)}
                 render={<Link href={item.href} />}
               >
                 <HugeiconsIcon icon={item.icon} />
-                <span>{item.title}</span>
+                <span>{t(item.titleKey)}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
           <SidebarMenuItem>
             <form action={logout}>
               <SidebarMenuButton
-                tooltip="Log out"
+                tooltip={t("logout")}
                 className="text-red-600 hover:!bg-red-500/10 hover:!text-red-700 focus-visible:!ring-red-500"
                 render={<button type="submit" />}
               >
                 <HugeiconsIcon icon={Logout02Icon} />
-                <span>Log out</span>
+                <span>{t("logout")}</span>
               </SidebarMenuButton>
             </form>
           </SidebarMenuItem>

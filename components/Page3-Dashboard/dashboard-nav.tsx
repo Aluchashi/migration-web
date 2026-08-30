@@ -2,19 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const items = [
-  { href: "/dashboard", label: "Overview" },
-  { href: "/dashboard/profile", label: "Profile" },
-  { href: "/dashboard/career-matcher", label: "Career matcher" },
-  { href: "/dashboard/skill-gap", label: "Skill gap" },
-  { href: "/dashboard/legal-guidance", label: "Legal guidance" },
-  { href: "/dashboard/learning-roadmap", label: "Learning map" },
-  { href: "/dashboard/scam-checker", label: "Scam check" },
+  { href: "/dashboard", labelKey: "overview" },
+  { href: "/dashboard/profile", labelKey: "profile" },
+  { href: "/dashboard/career-matcher", labelKey: "careerMatcher" },
+  { href: "/dashboard/skill-gap", labelKey: "skillGap" },
+  { href: "/dashboard/legal-guidance", labelKey: "legalGuidance" },
+  { href: "/dashboard/learning-roadmap", labelKey: "learningMap" },
+  { href: "/dashboard/scam-checker", labelKey: "scamCheck" },
 ];
 
 export function DashboardNav() {
   const pathname = usePathname();
+  const t = useTranslations("Dashboard.nav");
 
   return (
     <div className="border-b border-zinc-200 bg-white">
@@ -32,7 +34,7 @@ export function DashboardNav() {
                 active ? "bg-emerald-50 text-emerald-800" : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950",
               ].join(" ")}
             >
-              {item.label}
+              {t(item.labelKey)}
             </Link>
           );
         })}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { ProfileForm } from "@/components/Page4-Profile/profile-form";
 import { getAuthenticatedUser } from "@/lib/auth-user";
@@ -26,6 +27,8 @@ export default async function ProfilePage() {
     redirect("/login");
   }
 
+  const t = await getTranslations("Dashboard.page");
+
   const profile = await prisma.profile.findUnique({
     where: { userId: user.id },
     include: {
@@ -39,14 +42,13 @@ export default async function ProfilePage() {
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="mb-8">
         <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
-          Your profile
+          {t("profileTitle")}
         </p>
         <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl dark:text-zinc-50">
-          Tell us about yourself
+          {t("profileSubtitle")}
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-          The more complete your background, the smarter your career matches, skill gap
-          analysis, and roadmap will be.
+          {t("profileDesc")}
         </p>
       </div>
 

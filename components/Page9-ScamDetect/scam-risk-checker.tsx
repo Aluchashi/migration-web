@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ShieldAlertIcon } from "@hugeicons/core-free-icons";
+import { useTranslations } from "next-intl";
 
 import type { ScamRiskInput, RiskLevel } from "@/lib/scam-risk";
 
@@ -19,11 +20,11 @@ const riskLevelClass: Record<RiskLevel, string> = {
 };
 
 const riskLevelLabel: Record<RiskLevel, string> = {
-  LOW: "Low",
-  MODERATE: "Moderate",
-  ELEVATED: "Elevated",
-  HIGH: "High",
-  VERY_HIGH: "Very high",
+  LOW: "levelLow",
+  MODERATE: "levelModerate",
+  ELEVATED: "levelElevated",
+  HIGH: "levelHigh",
+  VERY_HIGH: "levelVeryHigh",
 };
 
 type AlternativeAgencyRecommendation = {
@@ -76,13 +77,13 @@ type ScamRiskAssessmentResponse = {
 };
 
 const selectionReasons = [
-  { value: "lowCost", label: "Low cost" },
-  { value: "highSalary", label: "High salary" },
-  { value: "fastProcessing", label: "Fast processing" },
-  { value: "goodReputation", label: "Good reputation" },
-  { value: "recommendation", label: "Recommendation" },
-  { value: "promisedJob", label: "Promised job" },
-  { value: "easyVisaProcessing", label: "Easy visa processing" },
+  { value: "lowCost", label: "lowCost" },
+  { value: "highSalary", label: "highSalary" },
+  { value: "fastProcessing", label: "fastProcessing" },
+  { value: "goodReputation", label: "goodReputation" },
+  { value: "recommendation", label: "recommendation" },
+  { value: "promisedJob", label: "promisedJob" },
+  { value: "easyVisaProcessing", label: "easyVisa" },
 ] as const;
 
 const defaultValues: ScamRiskInput = {
@@ -109,6 +110,8 @@ export function ScamRiskChecker() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ScamRiskAssessmentResponse | null>(null);
+
+  const t = useTranslations("Dashboard.scamCheck");
 
   function handleChange<K extends keyof ScamRiskInput>(key: K, value: ScamRiskInput[K]) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -138,12 +141,12 @@ export function ScamRiskChecker() {
 
       const data = (await response.json()) as ScamRiskAssessmentResponse & { error?: string };
       if (!response.ok || !data.risk) {
-        throw new Error(data.error || "Could not assess the agency risk.");
+        throw new Error(data.error || t("error"));
       }
 
       setResult(data);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "Could not assess the agency risk.");
+      setError(requestError instanceof Error ? requestError.message : t("error"));
     } finally {
       setPending(false);
     }
@@ -158,7 +161,7 @@ export function ScamRiskChecker() {
         <div className="grid gap-5 md:grid-cols-2">
           <div className="md:col-span-2">
             <label htmlFor="agencyName" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-              Agency name
+              {t("agencyName")}
             </label>
             <input
               id="agencyName"
@@ -168,13 +171,13 @@ export function ScamRiskChecker() {
               required
               maxLength={160}
               className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-              placeholder="e.g. Verified Migration Services"
+              placeholder={t("agencyNamePlaceholder")}
             />
           </div>
 
           <div>
             <label htmlFor="destinationCountry" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-              Destination country
+              {t("destination")}
             </label>
             <input
               id="destinationCountry"
@@ -184,13 +187,13 @@ export function ScamRiskChecker() {
               required
               maxLength={100}
               className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-              placeholder="Germany"
+              placeholder={t("destinationPlaceholder")}
             />
           </div>
 
           <div>
             <label htmlFor="occupation" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-              Occupation
+              {t("occupation")}
             </label>
             <input
               id="occupation"
@@ -200,13 +203,13 @@ export function ScamRiskChecker() {
               required
               maxLength={160}
               className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 hover:border-zinc-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
-              placeholder="Electrician"
+              placeholder={t("occupationPlaceholder")}
             />
           </div>
 
           <div>
             <label htmlFor="offeredSalaryMonthly" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-              Offered monthly salary
+              {t("salary")}
             </label>
             <input
               id="offeredSalaryMonthly"
@@ -222,7 +225,7 @@ export function ScamRiskChecker() {
 
           <div>
             <label htmlFor="agencyCost" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-              Agency cost
+              {t("cost")}
             </label>
             <input
               id="agencyCost"
@@ -238,7 +241,7 @@ export function ScamRiskChecker() {
 
           <div>
             <label htmlFor="claimedProcessingDays" className="mb-2 block text-sm font-medium text-zinc-800 dark:text-zinc-100">
-              Claimed processing days
+              {t("days")}
             </label>
             <input
               id="claimedProcessingDays"
@@ -253,7 +256,7 @@ export function ScamRiskChecker() {
           </div>
 
           <div className="md:col-span-2">
-            <p className="mb-3 text-sm font-medium text-zinc-800 dark:text-zinc-100">Why this agency?</p>
+            <p className="mb-3 text-sm font-medium text-zinc-800 dark:text-zinc-100">{t("whyThisAgency")}</p>
             <div className="flex flex-wrap gap-2">
               {selectionReasons.map((reason) => {
                 const selected = form.selectionReasons.includes(reason.value);
@@ -269,7 +272,7 @@ export function ScamRiskChecker() {
                         : "border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200",
                     ].join(" ")}
                   >
-                    {reason.label}
+                    {t(reason.label)}
                   </button>
                 );
               })}
@@ -283,7 +286,7 @@ export function ScamRiskChecker() {
               onChange={(event) => handleChange("paymentToPersonalAccount", event.target.checked)}
               className="h-4 w-4 rounded border-zinc-300 accent-emerald-600"
             />
-            Payment to a personal account
+            {t("personalAccount")}
           </label>
 
           <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
@@ -293,7 +296,7 @@ export function ScamRiskChecker() {
               onChange={(event) => handleChange("urgentPaymentRequest", event.target.checked)}
               className="h-4 w-4 rounded border-zinc-300 accent-emerald-600"
             />
-            Urgent payment request
+            {t("urgentPayment")}
           </label>
 
           <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
@@ -303,7 +306,7 @@ export function ScamRiskChecker() {
               onChange={(event) => handleChange("guaranteedJob", event.target.checked)}
               className="h-4 w-4 rounded border-zinc-300 accent-emerald-600"
             />
-            Guaranteed job
+            {t("guaranteedJob")}
           </label>
 
           <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
@@ -313,7 +316,7 @@ export function ScamRiskChecker() {
               onChange={(event) => handleChange("guaranteedVisa", event.target.checked)}
               className="h-4 w-4 rounded border-zinc-300 accent-emerald-600"
             />
-            Guaranteed visa
+            {t("guaranteedVisa")}
           </label>
         </div>
 
@@ -332,7 +335,7 @@ export function ScamRiskChecker() {
             disabled={pending}
             className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-semibold text-white transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-400"
           >
-            {pending ? "Checking..." : "Check risk"}
+            {pending ? t("checking") : t("checkRisk")}
           </button>
         </div>
       </form>
@@ -347,32 +350,32 @@ export function ScamRiskChecker() {
                 </div>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Risk assessment</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{t("riskAssessment")}</p>
                 <h2 className="mt-1 text-xl font-semibold text-zinc-950 dark:text-zinc-50">{result.agency.name}</h2>
               </div>
             </div>
             <span
               className={`rounded-xl px-3 py-2 text-sm font-semibold ring-1 ring-inset ${riskLevelClass[result.risk.level]}`}
             >
-              {result.risk.score}% risk
+              {t("riskScore", { value: String(result.risk.score) })}
             </span>
           </div>
 
           <div className="mt-5 grid gap-5 md:grid-cols-3">
             <div className="rounded-3xl bg-muted/50 p-5 dark:bg-zinc-900/40">
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Risk level</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{t("riskLevel")}</p>
               <p className="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
-                {riskLevelLabel[result.risk.level]}
+                {t(riskLevelLabel[result.risk.level])}
               </p>
             </div>
             <div className="rounded-3xl bg-muted/50 p-5 dark:bg-zinc-900/40">
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Verification</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{t("verification")}</p>
               <p className="mt-2 text-lg font-semibold text-zinc-950 dark:text-zinc-50">{result.agency.verificationStatus}</p>
             </div>
             <div className="rounded-3xl bg-muted/50 p-5 dark:bg-zinc-900/40">
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">License status</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{t("license")}</p>
               <p className="mt-2 text-lg font-semibold text-zinc-950 dark:text-zinc-50">
-                {result.agency.licenseStatus ?? "unknown"}
+                {result.agency.licenseStatus ?? t("unknown")}
               </p>
             </div>
           </div>
@@ -383,7 +386,7 @@ export function ScamRiskChecker() {
 
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
             <div>
-              <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">Risk factors</h3>
+              <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">{t("riskFactors")}</h3>
               {result.risk.factors.length > 0 ? (
                 <ul className="mt-3 space-y-3">
                   {result.risk.factors.map((factor) => (
@@ -394,7 +397,7 @@ export function ScamRiskChecker() {
                       <div className="flex items-center justify-between gap-3">
                         <p className="font-medium text-zinc-900 dark:text-zinc-100">{factor.title}</p>
                         <span className="rounded-full bg-zinc-200 px-2 py-1 text-xs font-semibold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200">
-                          {factor.points} pts
+                          {t("points", { value: String(factor.points) })}
                         </span>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{factor.description}</p>
@@ -403,13 +406,13 @@ export function ScamRiskChecker() {
                 </ul>
               ) : (
                 <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
-                  No clear risk indicators were identified from the current information.
+                  {t("noRisk")}
                 </p>
               )}
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">Information gaps</h3>
+              <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">{t("infoGaps")}</h3>
               {result.risk.informationGaps.length > 0 ? (
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
                   {result.risk.informationGaps.map((item) => (
@@ -417,10 +420,10 @@ export function ScamRiskChecker() {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">No major information gaps were identified.</p>
+                <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">{t("noGaps")}</p>
               )}
               <div className="mt-6 rounded-3xl border border-zinc-200 bg-muted/50 p-5 dark:border-zinc-800 dark:bg-zinc-900/40">
-                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Agency note</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{t("agencyNote")}</p>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
                   {result.agency.notes.map((note) => (
                     <li key={note}>{note}</li>
@@ -432,7 +435,7 @@ export function ScamRiskChecker() {
 
           {result.officialSource ? (
             <div className="mt-8 rounded-3xl border border-zinc-200 bg-muted/50 p-5 dark:border-zinc-800 dark:bg-zinc-900/40">
-              <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">Official verification source</h3>
+              <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">{t("officialSource")}</h3>
               <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">{result.officialSource.name}</p>
               {result.officialSource.url ? (
                 <a
@@ -441,16 +444,16 @@ export function ScamRiskChecker() {
                   rel="noreferrer"
                   className="mt-2 inline-block text-sm font-medium text-emerald-700 underline underline-offset-2"
                 >
-                  Open source link
+                  {t("openSource")}
                 </a>
               ) : null}
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Freshness: {result.officialSource.freshness}</p>
+              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{t("freshness")} {result.officialSource.freshness}</p>
             </div>
           ) : null}
 
           {result.alternatives.length > 0 ? (
             <div className="mt-8">
-              <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">Lower-risk alternatives</h3>
+              <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">{t("alternatives")}</h3>
               <div className="mt-4 grid gap-4 md:grid-cols-2">
                 {result.alternatives.map((agency) => (
                   <div

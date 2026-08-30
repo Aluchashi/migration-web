@@ -6,7 +6,7 @@ import { COUNTRY_LEGAL, LEGAL_CORRIDORS, PRE_DEPARTURE_STEPS } from "@/lib/legal
 import { getAuthenticatedUser } from "@/lib/auth-user";
 import { prisma } from "@/lib/prisma";
 
-export const metadata: Metadata = { title: "Legal Migration Guidance" };
+export const metadata: Metadata = { title: "Migration Guidance" };
 
 export default async function LegalGuidancePage({
   searchParams,

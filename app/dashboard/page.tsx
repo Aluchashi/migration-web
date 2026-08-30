@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { getAuthenticatedUser } from "@/lib/auth-user";
 import { prisma } from "@/lib/prisma";
@@ -11,6 +12,8 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  const t = await getTranslations("Dashboard.page");
+
   const [profile, matchCount, reportCount, legalSteps] = await Promise.all([
     prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true } }),
     prisma.careerMatch.count({ where: { userId: user.id } }),
@@ -20,13 +23,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-      <p className="text-sm font-medium text-emerald-700">Dashboard</p>
+      <p className="text-sm font-medium text-emerald-700">{t("title")}</p>
       <h1 className="mt-2 text-2xl font-semibold text-zinc-950 sm:text-3xl">
-        Welcome, {user.name ?? "there"}.
+        {t("welcome", { name: user.name ?? "there" })}
       </h1>
-      <p className="mt-3 max-w-2xl text-zinc-600">
-        Build your career profile, then compare practical country and job options.
-      </p>
+      <p className="mt-3 max-w-2xl text-zinc-600">{t("subtitle")}</p>
 
       <div className="mt-8">
         <OverviewCards
